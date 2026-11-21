@@ -1,0 +1,9 @@
+kind,time_s,end_s,bar,beat,pct,strength_db,detail
+hit,0.489,,0,4.0,0.7,23.4,full impact
+hit,11.704,,8,4.52,15.9,9.4,full impact
+hit,38.082,,27,5.0,51.9,7.9,sub/kick impact
+hit,51.875,,37,4.99,70.7,8.1,sub/kick impact
+hit,65.667,,47,4.98,89.4,9.0,sub/kick impact
+breakdown,68.43,71.19,50,1,93.2,6.6,"2 bars, leads_into_drop=False"
+end_cut,71.88,,52,2.99,97.9,69.4,"hard cut then decay, tail 1.55 s"
+drop,11.87,,9,1,16.2,2.2,"full impact (+9.4 dB, one-shot 1.88 s) -> bass +2.1 dB, brightness +518 Hz"

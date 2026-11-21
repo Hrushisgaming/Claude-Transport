@@ -1,0 +1,32 @@
+{
+ "name": "lms_chase",
+ "base": "metal",
+ "override": {
+  "bpm": [
+   171,
+   179
+  ],
+  "scales": [
+   "minor"
+  ],
+  "swing": 0.007,
+  "guitar": {
+   "inst": "guitar_elec",
+   "rhythm": "xmxmxmx.x.xmxmxm",
+   "kind": "triad",
+   "kw": {
+    "drive": 10.0,
+    "mute": 0.5
+   }
+  },
+  "plan": [
+   [
+    "drop",
+    1.0
+   ]
+  ],
+  "lufs": -12.05,
+  "chord_len": 1
+ },
+ "note": "DRAFT from measurements: tune with `af.py compare` until the numbers match, then ship it."
+}

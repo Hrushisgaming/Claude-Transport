@@ -1,0 +1,7 @@
+kind,time_s,end_s,bar,beat,pct,strength_db,detail
+hit,19.947,,15,1.0,26.2,8.9,full impact
+hit,41.89,,31,1.01,55.0,9.8,full impact
+hit,61.093,,45,1.02,80.2,12.5,full impact
+drop,3.491,,3,1,4.6,2.1,"bass +3.5 dB, brightness +558 Hz"
+drop,19.946,,15,1,26.2,5.9,"full impact (+8.9 dB, one-shot 0.84 s) -> bass +6.2 dB, brightness -331 Hz"
+drop,61.084,,45,1,80.2,1.2,"full impact (+12.5 dB, level stays up) -> bass +0.9 dB, brightness -119 Hz"

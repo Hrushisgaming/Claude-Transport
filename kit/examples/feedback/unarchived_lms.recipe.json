@@ -1,0 +1,116 @@
+{
+  "title": "UNARCHIVED - Last Man Standing (2008 Corrupted)",
+  "game": "UNARCHIVED",
+  "duration_sec": 73.0,
+  "bpm": 174,
+  "key": "E Phrygian",
+  "tuning_a4_hz": 440.0,
+  "dread": 0.85,
+  "style_blend": {
+    "eternal_hope_eternal_fight": 0.65,
+    "a_grave_soul_now_run": 0.25,
+    "y2k_2008_roblox": 0.10
+  },
+  "mix_notes": {
+    "remove_vibrato_wobble": true,
+    "dry_drums_vs_wet_bells": true,
+    "highpass_strings_and_piano_hz": 280
+  },
+  "dread_fx": {
+    "clock_tick": {
+      "enabled": true,
+      "interval_sec": 1.0,
+      "jitter_ms": 8.0,
+      "level_db": -13.5
+    },
+    "clock_bell": {
+      "enabled": true,
+      "start_sec": 35.0,
+      "end_sec": 50.0,
+      "interval_sec": 5.0,
+      "freq_hz": 146.83,
+      "level_db": -7.5
+    },
+    "laughs": [
+      {
+        "time_sec": 10.85,
+        "pitch_hz": 168.0,
+        "velocity": 0.92,
+        "note": "Double HA-HA! right into Drop 1"
+      },
+      {
+        "time_sec": 50.35,
+        "pitch_hz": 158.0,
+        "velocity": 0.95,
+        "note": "Double HA-HA! right after final 50s clock bell into Drop 2"
+      }
+    ],
+    "dropouts": [
+      {
+        "start_sec": 10.65,
+        "duration_sec": 0.35,
+        "reverse_suction": true
+      },
+      {
+        "start_sec": 21.85,
+        "duration_sec": 0.22,
+        "reverse_suction": false
+      },
+      {
+        "start_sec": 50.15,
+        "duration_sec": 0.38,
+        "reverse_suction": true
+      }
+    ],
+    "stereo_crawl": {
+      "enabled": true,
+      "rate_hz": 0.24,
+      "level_db": -17.0
+    },
+    "roblox_glitches": [4.5, 19.2, 37.8, 46.4, 62.1]
+  },
+  "sections": [
+    {
+      "name": "Intro_Unarchived_Void",
+      "start_sec": 0.0,
+      "end_sec": 11.0,
+      "instruments": ["ice_piano", "pipe_organ", "church_bells", "sub_bass"],
+      "motif_intervals": ["1", "b2", "5", "b6", "tritone"],
+      "vibe": "Eerie 2008 empty-server dread; icy EHEF crystalline arpeggios over ASG sub-rumble, cut off by 0:10.65 silence choke + double HA-HA laugh."
+    },
+    {
+      "name": "Drop_1_Hunted_Chase",
+      "start_sec": 11.0,
+      "end_sec": 35.0,
+      "instruments": ["amen_dry_crushed", "reese_growl", "palm_guitar", "lead_soar", "ice_piano"],
+      "drum_grid_16": {
+        "kick": "x..x..x...x.x...",
+        "snare": "....x.......x...",
+        "hat": "x.x.x.x.x.x.x.xx",
+        "ghost": "..g...g..g...g.."
+      },
+      "vibe": "Razor-dry EHEF breakcore drums + anxious soaring lead (no excessive vibrato) + ASG palm-muted tritone/b2 guitar chugs + mid-drop micro-silence at 0:21.85."
+    },
+    {
+      "name": "Middle_Clock_Bell_Stalk",
+      "start_sec": 35.0,
+      "end_sec": 50.5,
+      "instruments": ["clock_bell", "clock_tick", "choir_pad", "sub_bass", "y2k_arp"],
+      "vibe": "Stripped-back stalking breakdown: noticeable clock bell tolls at 0:35, 0:40, 0:45, and 0:50 over 1s clock ticks, ghostly choir pad, and occasional 2008 Y2K tracker glitches."
+    },
+    {
+      "name": "Drop_2_Final_Pursuit",
+      "start_sec": 50.5,
+      "end_sec": 68.5,
+      "instruments": ["amen_dry_crushed", "power_guitar", "reese_growl", "y2k_fm_bass", "lead_soar", "trem_strings"],
+      "vibe": "Double HA-HA laugh slams into the relentless final chase; full Phrygian/tritone tension with Y2K FM bass stabs."
+    },
+    {
+      "name": "Outro_Faint_Relief",
+      "start_sec": 68.5,
+      "end_sec": 73.0,
+      "instruments": ["ice_piano", "church_bells", "sub_bass"],
+      "vibe": "Abrupt climax cut-off at 1:08.5 into hollow decaying drone, ending in the final 4 seconds with a faint, fragile minor-to-major-9th harmonic relief like A Grave Soul."
+    }
+  ]
+}

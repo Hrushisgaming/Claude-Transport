@@ -1,0 +1,141 @@
+{
+ "style": "lms-presenter",
+ "bpm": 171.1,
+ "key": "G minor",
+ "bars": 64,
+ "seconds": 89.8,
+ "sections": [
+  {
+   "label": "intro",
+   "compose": "intro",
+   "start_bar": 1,
+   "bars": 7,
+   "energy_rel_db": -10.0,
+   "form": "A",
+   "layers": []
+  },
+  {
+   "label": "build",
+   "compose": "build",
+   "start_bar": 8,
+   "bars": 30,
+   "energy_rel_db": -3.0,
+   "form": "B",
+   "layers": [
+    "+sub 9dB",
+    "+bass 4dB",
+    "+mid 4dB",
+    "+highmid 3dB",
+    "+air 8dB"
+   ]
+  },
+  {
+   "label": "drop",
+   "compose": "drop",
+   "start_bar": 38,
+   "bars": 8,
+   "energy_rel_db": -1.6,
+   "form": "C",
+   "layers": []
+  },
+  {
+   "label": "drop",
+   "compose": "drop",
+   "start_bar": 46,
+   "bars": 7,
+   "energy_rel_db": -1.2,
+   "form": "B'",
+   "layers": []
+  },
+  {
+   "label": "build",
+   "compose": "build",
+   "start_bar": 53,
+   "bars": 2,
+   "energy_rel_db": -8.2,
+   "form": "D",
+   "layers": [
+    "-sub 11dB",
+    "-bass 5dB",
+    "-lowmid 15dB",
+    "-mid 13dB",
+    "-highmid 7dB"
+   ]
+  },
+  {
+   "label": "drop",
+   "compose": "drop",
+   "start_bar": 55,
+   "bars": 7,
+   "energy_rel_db": -0.9,
+   "form": "B'",
+   "layers": [
+    "+sub 8dB",
+    "+bass 5dB",
+    "+lowmid 15dB",
+    "+mid 13dB",
+    "+highmid 8dB",
+    "+air 3dB"
+   ]
+  },
+  {
+   "label": "outro",
+   "compose": "outro",
+   "start_bar": 62,
+   "bars": 3,
+   "energy_rel_db": -18.3,
+   "form": "E",
+   "layers": [
+    "-sub 13dB",
+    "-bass 5dB",
+    "-lowmid 8dB",
+    "-mid 8dB",
+    "-highmid 5dB",
+    "-air 7dB"
+   ]
+  }
+ ],
+ "events": [
+  {
+   "bar": 4,
+   "kind": "riser",
+   "detail": "high-band sweep about 6.62 s, +46 dB"
+  },
+  {
+   "bar": 8,
+   "kind": "DROP",
+   "detail": "riser over bars 6-7 (high bands up about +46 dB); full impact ON the downbeat of bar 8; bass/sub entry about +6 dB",
+   "reference_anatomy": "riser +46 dB over 6.62 s -> full impact (+9.7 dB, one-shot 1.59 s) -> bass +5.5 dB, brightness +1331 Hz"
+  },
+  {
+   "bar": 16,
+   "kind": "stop",
+   "detail": "cut of 0.1 s, then full impact"
+  },
+  {
+   "bar": 38,
+   "kind": "DROP",
+   "detail": "full impact ON the downbeat of bar 38; bass/sub entry about +2 dB",
+   "reference_anatomy": "full impact (+8.0 dB, one-shot 0.23 s) -> bass +2.2 dB, brightness -223 Hz"
+  },
+  {
+   "bar": 53,
+   "kind": "breakdown",
+   "detail": "strip back for about 2 bars: energy about 7 dB under the sections around it, bass about 7 dB down; it leads into a drop"
+  },
+  {
+   "bar": 54,
+   "kind": "DROP",
+   "detail": "bass/sub entry about +6 dB",
+   "reference_anatomy": "bass +5.8 dB, brightness -2133 Hz"
+  },
+  {
+   "bar": 62,
+   "kind": "end",
+   "detail": "hard cut then decay: last full-level music, then about 2.285 s of tail. For a LOOP, do not copy this ending; make the last bar lead back into bar 1."
+  }
+ ],
+ "hard_hits_total": 2,
+ "compose_plan": "[[\"intro\", 0.109], [\"build\", 0.469], [\"drop\", 0.125], [\"drop\", 0.109], [\"build\", 0.031], [\"drop\", 0.109], [\"outro\", 0.047]]",
+ "command": "python3 af.py compose --genre lms_presenter --bars 64 --bpm 171 --plan '[[\"intro\", 0.109], [\"build\", 0.469], [\"drop\", 0.125], [\"drop\", 0.109], [\"build\", 0.031], [\"drop\", 0.109], [\"outro\", 0.047]]' --out cand.wav"
+}

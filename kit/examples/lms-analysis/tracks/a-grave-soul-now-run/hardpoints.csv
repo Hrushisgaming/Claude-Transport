@@ -1,0 +1,7 @@
+kind,time_s,end_s,bar,beat,pct,strength_db,detail
+hit,1.487,,1,4.99,2.0,7.4,full impact
+breakdown,38.08,43.93,27,1,52.0,2.3,"4 bars, leads_into_drop=True"
+build,43.93,48.32,31,1,60.0,0.23,"3 bars, onset_rise=0.4"
+end_cut,69.85,,48,3.83,95.4,7.4,"hard cut then decay, tail 3.4 s"
+drop,11.736,,9,1,16.0,2.3,"bass +2.6 dB, brightness +655 Hz"
+drop,48.322,,34,1,66.0,2.2,"bass +2.3 dB, brightness -27 Hz"

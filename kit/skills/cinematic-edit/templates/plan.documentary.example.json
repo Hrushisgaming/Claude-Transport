@@ -1,0 +1,252 @@
+{
+ "source": "/path/to/take.mp4",
+ "music": null,
+ "format": "9:16",
+ "fps": 30,
+ "start": 0,
+ "dur": 20.0,
+ "reframe": {
+  "mode": "cover",
+  "x": 0.5,
+  "bg": "blur"
+ },
+ "look": {
+  "grain": 0.05,
+  "vignette": 0.45,
+  "letterbox": 0.0,
+  "bloom": 0.25
+ },
+ "acts": [
+  {
+   "name": "calm",
+   "t": 0.0,
+   "look": "cold",
+   "drone": 0.1,
+   "heart_bpm": 55
+  },
+  {
+   "name": "the hunt",
+   "t": 2.8,
+   "look": "teal",
+   "drone": 0.3,
+   "heart_bpm": 70,
+   "halftone": 0.5
+  },
+  {
+   "name": "escalation",
+   "t": 8.4,
+   "look": "teal",
+   "drone": 0.55,
+   "heart_bpm": 90
+  },
+  {
+   "name": "finale",
+   "t": 14.4,
+   "look": "bleach",
+   "drone": 0.85,
+   "heart_bpm": 115
+  },
+  {
+   "name": "payoff",
+   "t": 18.4,
+   "look": "warm",
+   "drone": 0.25,
+   "heart_bpm": 60
+  }
+ ],
+ "events": [
+  {
+   "t": 18.971,
+   "strength": 1.0,
+   "fx": [
+    "punch",
+    "shake",
+    "flash",
+    "chroma"
+   ],
+   "sfx": "impact",
+   "riser": 1.2,
+   "ramp": {
+    "speed": 0.3,
+    "dur": 1.0
+   }
+  }
+ ],
+ "overlays": [],
+ "visualizer": {
+  "style": "bars",
+  "pos": "bottom",
+  "color": "#ffffff",
+  "opacity": 0.8
+ },
+ "audio": {
+  "game_db": -4,
+  "music_db": -13,
+  "duck_db": -7,
+  "sfx_db": -3,
+  "lufs": -14,
+  "music_beat_sync": false
+ },
+ "sources": [
+  {
+   "id": "s0",
+   "path": "img/a0.jpg",
+   "licence": "own test art (CC0)",
+   "what": "synthetic",
+   "url": "https://..."
+  },
+  {
+   "id": "s1",
+   "path": "img/a1.jpg",
+   "licence": "own test art (CC0)",
+   "what": "synthetic",
+   "url": "https://..."
+  },
+  {
+   "id": "s2",
+   "path": "img/a2.jpg",
+   "licence": "own test art (CC0)",
+   "what": "synthetic",
+   "url": "https://..."
+  },
+  {
+   "id": "s3",
+   "path": "img/a3.jpg",
+   "licence": "own test art (CC0)",
+   "what": "synthetic",
+   "url": "https://..."
+  },
+  {
+   "id": "s4",
+   "path": "img/a4.jpg",
+   "licence": "own test art (CC0)",
+   "what": "synthetic",
+   "url": "https://..."
+  },
+  {
+   "id": "s5",
+   "path": "img/a5.jpg",
+   "licence": "own test art (CC0)",
+   "what": "synthetic",
+   "url": "https://..."
+  },
+  {
+   "id": "s10",
+   "path": "img/c0.jpg",
+   "licence": "own test art (CC0)",
+   "what": "synthetic",
+   "url": "https://..."
+  },
+  {
+   "id": "s11",
+   "path": "img/c1.jpg",
+   "licence": "own test art (CC0)",
+   "what": "synthetic",
+   "url": "https://..."
+  },
+  {
+   "id": "s12",
+   "path": "img/c2.jpg",
+   "licence": "own test art (CC0)",
+   "what": "synthetic",
+   "url": "https://..."
+  },
+  {
+   "id": "s13",
+   "path": "img/c3.jpg",
+   "licence": "own test art (CC0)",
+   "what": "synthetic",
+   "url": "https://..."
+  },
+  {
+   "id": "s14",
+   "path": "img/c4.jpg",
+   "licence": "own test art (CC0)",
+   "what": "synthetic",
+   "url": "https://..."
+  },
+  {
+   "id": "s15",
+   "path": "img/c5.jpg",
+   "licence": "own test art (CC0)",
+   "what": "synthetic",
+   "url": "https://..."
+  }
+ ],
+ "devices": [
+  {
+   "type": "tile_reveal",
+   "t": 2.0,
+   "dur": 1.4,
+   "images": [
+    "img/a0.jpg"
+   ],
+   "treat": "teal"
+  },
+  {
+   "type": "strobe",
+   "t": 4.0,
+   "images": [
+    "img/c0.jpg",
+    "img/c1.jpg",
+    "img/c2.jpg",
+    "img/c3.jpg",
+    "img/c4.jpg",
+    "img/c5.jpg"
+   ],
+   "per": 3,
+   "treat": "mono"
+  },
+  {
+   "type": "wall3d",
+   "t": 6.0,
+   "dur": 1.8,
+   "images": [
+    "img/a0.jpg",
+    "img/a1.jpg",
+    "img/a2.jpg",
+    "img/a3.jpg",
+    "img/a4.jpg",
+    "img/a5.jpg"
+   ]
+  },
+  {
+   "type": "pop_collage",
+   "t": 9.0,
+   "every": 0.25,
+   "images": [
+    "img/a0.jpg",
+    "img/a1.jpg",
+    "img/a2.jpg",
+    "img/a3.jpg",
+    "img/a4.jpg"
+   ]
+  },
+  {
+   "type": "cutout_world",
+   "t": 12.0,
+   "dur": 3.0,
+   "every": 0.9,
+   "matte": "matte.mp4",
+   "matte_start": 12.0,
+   "mega": "NOBODY",
+   "images": [
+    "img/c0.jpg",
+    "img/c1.jpg",
+    "img/c2.jpg",
+    "img/c3.jpg"
+   ]
+  }
+ ],
+ "captions": {
+  "words": "words.json",
+  "keywords": [
+   "killer"
+  ],
+  "stress": [
+   "safe from"
+  ],
+  "pos": "lower",
+  "max_words": 5
+ }
+}

@@ -1,0 +1,63 @@
+{
+ "locks": {
+  "ending": "tape_stop_hit"
+ },
+ "recipe": {
+  "lift": "none",
+  "drums_c": "amen",
+  "lead": "bend_lead",
+  "pads": "trem_strings",
+  "bell": "bell_church",
+  "bell_pattern": "accents",
+  "piano": "piano_dark",
+  "riff_a": "syncopated",
+  "riff_c": "tritone",
+  "reese": true,
+  "organ_low": true
+ },
+ "mix_db": {
+  "bass": 9.0,
+  "sub": 9.0,
+  "sfx": 6.0,
+  "clock": 3.0,
+  "gtrL": 3.0,
+  "gtrR": 3.0,
+  "piano": 3.0,
+  "pianoL": 3.0,
+  "choir": 3.0,
+  "chime": 3.0
+ },
+ "bpm_delta": 0,
+ "advice": [],
+ "unmapped": [
+  "Overall mood & timestamps: The track aims for frantic chase dread, yet retro square leads, bright piano/chimes, and a heroic key lift turn much of it into energ",
+  "- Happy/heroic/cozy: 0:00-0:10 (clean music-box piano/chime intro), 0:22-0:38 (bright major chord turns and arcade square stabs), 0:49-1:11 (heroic semitone lif",
+  "Key and harmony: Minor-key (around C# minor, lifting to D minor at 0:49), so the foundation is dark, but major-chord turns (0:22-0:38), the heroic +1 semitone l",
+  "- Drums: Fake/looped (Amen 0:11-0:38, stiff DnB 0:49-1:11); pace fits, needs fills, glitch chops, and punchier sub-kick.",
+  "- Guitars: Fake fuzz blocks; switch to syncopated palm-muted dissonant riffs.",
+  "- Piano: Fake and bright; detune, low-pass, or use sparse low hits.",
+  "- Bells: Fake; keep low church bell sparingly, cut bright chimes and downbeat repetition.",
+  "- Strings/Choir: Fake warm choir; use cold dissonant tremolo strings instead.",
+  "- Organ & Brass: Not heard (unsure if buried); add low organ or dissonant brass stabs for dread.",
+  "- Synth lead: Fake retro square; replace short stabs/shakes with pitch-bent panicked minor-second lines.",
+  "Rhythm and pacing: Driving (~176 BPM, high confidence), relentless in Drop A (0:11-0:38), though quantized downbeat bells and Drop C's stiff DnB loop (0:49-1:11",
+  "Variation: Drop A (0:11-0:38) and Drop C (0:49-1:11) share the same blueprint; the 4-bar chords, downbeat bells, block guitars, and square stabs repeat too much",
+  "PART 2 (the reply was cut off in the middle of top_changes priority 5)\nheard_as tense, mood_match 5, tempo 176 high confidence, groove driving, ending death.",
+  "top_changes: 1 harmony/key lift 0:49-1:11: remove the heroic +1 semitone lift and bright major turns; stay dark in the home minor key with Phrygian b2 and dimin",
+  "2 synth_lead: replace repetitive arcade square stabs with pitch-bent, dissonant tritone and minor-second motifs.",
+  "4 drums: swap Drop C's stiff DnB loop for frantic chopped amen variations and add bar-end fills and risers before transitions."
+ ],
+ "findings": [
+  "a heroic key lift was heard: lift removed",
+  "a stiff DnB loop was heard: drop C uses chopped Amen",
+  "retro/arcade square lead: pitch-bent distorted saw",
+  "warm choir/pad: cold tremolo strings",
+  "bright/predictable bells: low church bell on accents only",
+  "bright piano: dark low piano",
+  "block-chord guitars: syncopated / tritone riffs",
+  "buried bass: reese layer on",
+  "listener asked for a low organ: optional dark organ on",
+  "no JSON block: scanned prose (rough). Use the prompt in TOOLS-GUIDE/HYDROGEN-PROMPT.md for reliable results.",
+  "listener hears happy/heroic parts"
+ ]
+}

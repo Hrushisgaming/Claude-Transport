@@ -1,0 +1,14 @@
+kind,time_s,end_s,bar,beat,pct,strength_db,detail
+hit,3.983,,3,1.03,5.3,8.2,full impact
+hit,21.317,,16,1.02,28.4,10.7,full impact
+hit,47.974,,35,4.98,64.0,11.4,full impact
+hit,53.314,,40,1.0,71.1,12.7,full impact
+hit,58.643,,43,4.99,78.2,8.7,full impact
+hit,61.313,,45,5.0,81.7,10.0,full impact
+hit,63.972,,47,4.97,85.3,15.9,full impact
+drop,3.975,,3,1,5.3,0.9,"full impact (+8.2 dB, one-shot 0.14 s) -> bass +0.8 dB, brightness +595 Hz"
+drop,10.642,,8,1,14.2,3.1,"bass +4.0 dB, brightness -613 Hz"
+drop,21.31,,16,1,28.4,2.4,"full impact (+10.7 dB, level stays up) -> bass +1.8 dB, brightness +201 Hz"
+drop,47.98,,36,1,64.0,1.9,"full impact (+11.4 dB, one-shot 0.46 s) -> bass +1.5 dB, brightness +218 Hz"
+drop,53.314,,40,1,71.1,1.9,"full impact (+12.7 dB, one-shot 1.78 s) -> bass +1.1 dB, brightness +304 Hz"
+drop,63.981,,48,1,85.3,4.8,"full impact (+15.9 dB, level stays up) -> bass +4.2 dB, brightness +463 Hz"

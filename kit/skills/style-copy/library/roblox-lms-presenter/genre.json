@@ -1,0 +1,36 @@
+{
+ "name": "lms_presenter",
+ "base": "metal",
+ "override": {
+  "bpm": [
+   167,
+   175
+  ],
+  "scales": [
+   "minor"
+  ],
+  "swing": 0.023,
+  "guitar": {
+   "inst": "guitar_elec",
+   "rhythm": "x.m.x.m.xmm.x.mm",
+   "kind": "triad",
+   "kw": {
+    "drive": 10.0,
+    "mute": 0.0
+   }
+  },
+  "plan": [
+   [
+    "intro",
+    0.103
+   ],
+   [
+    "drop",
+    0.897
+   ]
+  ],
+  "lufs": -12.45,
+  "chord_len": 1
+ },
+ "note": "DRAFT from measurements: tune with `af.py compare` until the numbers match, then ship it."
+}

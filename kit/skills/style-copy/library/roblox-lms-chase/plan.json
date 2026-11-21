@@ -1,0 +1,121 @@
+{
+ "style": "lms-chase",
+ "bpm": 175.0,
+ "key": "A minor",
+ "bars": 64,
+ "seconds": 87.8,
+ "sections": [
+  {
+   "label": "build",
+   "compose": "build",
+   "start_bar": 1,
+   "bars": 10,
+   "energy_rel_db": -3.5,
+   "form": "A",
+   "layers": []
+  },
+  {
+   "label": "drop",
+   "compose": "drop",
+   "start_bar": 11,
+   "bars": 13,
+   "energy_rel_db": -1.5,
+   "form": "B",
+   "layers": [
+    "+sub 4dB",
+    "+air 7dB"
+   ]
+  },
+  {
+   "label": "drop",
+   "compose": "drop",
+   "start_bar": 24,
+   "bars": 10,
+   "energy_rel_db": -1.8,
+   "form": "C",
+   "layers": []
+  },
+  {
+   "label": "break",
+   "compose": "break_",
+   "start_bar": 34,
+   "bars": 5,
+   "energy_rel_db": -3.5,
+   "form": "C'",
+   "layers": [
+    "-lowmid 4dB",
+    "-highmid 4dB",
+    "-air 4dB"
+   ]
+  },
+  {
+   "label": "build",
+   "compose": "build",
+   "start_bar": 39,
+   "bars": 4,
+   "energy_rel_db": -3.1,
+   "form": "C'",
+   "layers": []
+  },
+  {
+   "label": "drop",
+   "compose": "drop",
+   "start_bar": 43,
+   "bars": 18,
+   "energy_rel_db": -0.9,
+   "form": "D",
+   "layers": [
+    "+mid 4dB",
+    "+air 3dB"
+   ]
+  },
+  {
+   "label": "outro",
+   "compose": "outro",
+   "start_bar": 61,
+   "bars": 4,
+   "energy_rel_db": -16.4,
+   "form": "E",
+   "layers": [
+    "-sub 8dB",
+    "-bass 7dB",
+    "-lowmid 9dB",
+    "-mid 10dB",
+    "-highmid 8dB",
+    "-air 7dB"
+   ]
+  }
+ ],
+ "events": [
+  {
+   "bar": 11,
+   "kind": "DROP",
+   "detail": "bass/sub entry about +3 dB",
+   "reference_anatomy": "bass +2.6 dB, brightness +655 Hz"
+  },
+  {
+   "bar": 34,
+   "kind": "breakdown",
+   "detail": "strip back for about 4 bars: energy about 2 dB under the sections around it, bass about 2 dB down; it leads into a drop"
+  },
+  {
+   "bar": 39,
+   "kind": "build",
+   "detail": "3-bar build before the drop: denser drum hits (about +0.4 per beat) and a slowly rising level"
+  },
+  {
+   "bar": 43,
+   "kind": "DROP",
+   "detail": "bass/sub entry about +2 dB",
+   "reference_anatomy": "bass +2.3 dB, brightness -27 Hz"
+  },
+  {
+   "bar": 62,
+   "kind": "end",
+   "detail": "hard cut then decay: last full-level music, then about 2.92 s of tail. For a LOOP, do not copy this ending; make the last bar lead back into bar 1."
+  }
+ ],
+ "hard_hits_total": 2,
+ "compose_plan": "[[\"build\", 0.156], [\"drop\", 0.203], [\"drop\", 0.156], [\"break_\", 0.078], [\"build\", 0.062], [\"drop\", 0.281], [\"outro\", 0.062]]",
+ "command": "python3 af.py compose --genre lms_chase --bars 64 --bpm 175 --plan '[[\"build\", 0.156], [\"drop\", 0.203], [\"drop\", 0.156], [\"break_\", 0.078], [\"build\", 0.062], [\"drop\", 0.281], [\"outro\", 0.062]]' --out cand.wav"
+}

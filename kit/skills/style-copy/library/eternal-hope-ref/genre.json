@@ -1,0 +1,36 @@
+{
+ "name": "hope_ref",
+ "base": "metal",
+ "override": {
+  "bpm": [
+   169,
+   177
+  ],
+  "scales": [
+   "minor"
+  ],
+  "swing": 0.011,
+  "guitar": {
+   "inst": "guitar_elec",
+   "rhythm": "x.x.x.x.x.m.x.mm",
+   "kind": "triad",
+   "kw": {
+    "drive": 10.0,
+    "mute": 0.0
+   }
+  },
+  "plan": [
+   [
+    "drop",
+    0.942
+   ],
+   [
+    "outro",
+    0.058
+   ]
+  ],
+  "lufs": -14.6,
+  "chord_len": 2
+ },
+ "note": "DRAFT from measurements: tune with `af.py compare` until the numbers match, then ship it."
+}

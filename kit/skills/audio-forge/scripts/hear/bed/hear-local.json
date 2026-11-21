@@ -1,0 +1,407 @@
+{
+ "schema": "audio-forge/hear-local@1",
+ "file": "bed.wav",
+ "seconds": 28.67,
+ "offset_s": 0.0,
+ "bpm": 102.85,
+ "key": "B minor",
+ "loudness": {
+  "lufs": -9.2,
+  "lra": 12.2,
+  "true_peak_db": -1.4
+ },
+ "peak_dbfs": -1.36,
+ "clipped_samples": 0,
+ "dc_offset": [
+  2e-05,
+  0.00019
+ ],
+ "overall_bands_db": {
+  "sub": -17.5,
+  "bass": -19.8,
+  "low_mid": -24.8,
+  "mid": -26.0,
+  "high_mid": -40.2,
+  "air": -55.2
+ },
+ "beat_punch": {
+  "median_crest_db": 8.8,
+  "beats": [
+   {
+    "t": 0.56,
+    "peak_db": -16.0,
+    "crest_db": 9.4
+   },
+   {
+    "t": 1.14,
+    "peak_db": -14.7,
+    "crest_db": 8.8
+   },
+   {
+    "t": 1.72,
+    "peak_db": -15.7,
+    "crest_db": 7.9
+   },
+   {
+    "t": 2.31,
+    "peak_db": -14.5,
+    "crest_db": 9.1
+   },
+   {
+    "t": 2.89,
+    "peak_db": -16.6,
+    "crest_db": 8.5
+   },
+   {
+    "t": 3.47,
+    "peak_db": -14.0,
+    "crest_db": 9.2
+   },
+   {
+    "t": 4.06,
+    "peak_db": -16.4,
+    "crest_db": 8.8
+   },
+   {
+    "t": 4.64,
+    "peak_db": -14.9,
+    "crest_db": 8.9
+   },
+   {
+    "t": 5.22,
+    "peak_db": -14.1,
+    "crest_db": 9.9
+   },
+   {
+    "t": 5.81,
+    "peak_db": -14.7,
+    "crest_db": 11.0
+   },
+   {
+    "t": 6.39,
+    "peak_db": -15.7,
+    "crest_db": 9.1
+   },
+   {
+    "t": 6.97,
+    "peak_db": -9.9,
+    "crest_db": 9.5
+   },
+   {
+    "t": 7.56,
+    "peak_db": -14.4,
+    "crest_db": 8.7
+   },
+   {
+    "t": 8.14,
+    "peak_db": -13.3,
+    "crest_db": 9.6
+   },
+   {
+    "t": 8.72,
+    "peak_db": -13.3,
+    "crest_db": 8.8
+   },
+   {
+    "t": 9.31,
+    "peak_db": -11.2,
+    "crest_db": 8.6
+   },
+   {
+    "t": 9.89,
+    "peak_db": -11.4,
+    "crest_db": 8.0
+   },
+   {
+    "t": 10.47,
+    "peak_db": -10.5,
+    "crest_db": 8.2
+   },
+   {
+    "t": 11.06,
+    "peak_db": -8.9,
+    "crest_db": 8.6
+   },
+   {
+    "t": 11.64,
+    "peak_db": -7.7,
+    "crest_db": 8.4
+   },
+   {
+    "t": 12.22,
+    "peak_db": -6.5,
+    "crest_db": 8.8
+   },
+   {
+    "t": 12.81,
+    "peak_db": -5.6,
+    "crest_db": 8.9
+   },
+   {
+    "t": 13.39,
+    "peak_db": -5.5,
+    "crest_db": 9.3
+   },
+   {
+    "t": 13.97,
+    "peak_db": -3.9,
+    "crest_db": 9.2
+   },
+   {
+    "t": 14.56,
+    "peak_db": -2.1,
+    "crest_db": 8.4
+   },
+   {
+    "t": 15.14,
+    "peak_db": -2.7,
+    "crest_db": 9.2
+   },
+   {
+    "t": 15.72,
+    "peak_db": -4.0,
+    "crest_db": 8.3
+   },
+   {
+    "t": 16.31,
+    "peak_db": -3.2,
+    "crest_db": 7.9
+   },
+   {
+    "t": 16.89,
+    "peak_db": -2.8,
+    "crest_db": 8.3
+   },
+   {
+    "t": 17.48,
+    "peak_db": -2.7,
+    "crest_db": 9.9
+   },
+   {
+    "t": 18.06,
+    "peak_db": -3.7,
+    "crest_db": 7.8
+   },
+   {
+    "t": 18.64,
+    "peak_db": -2.0,
+    "crest_db": 8.8
+   },
+   {
+    "t": 19.23,
+    "peak_db": -2.0,
+    "crest_db": 9.0
+   },
+   {
+    "t": 19.81,
+    "peak_db": -2.6,
+    "crest_db": 7.8
+   },
+   {
+    "t": 20.39,
+    "peak_db": -3.3,
+    "crest_db": 8.8
+   },
+   {
+    "t": 20.98,
+    "peak_db": -2.1,
+    "crest_db": 9.3
+   },
+   {
+    "t": 21.56,
+    "peak_db": -3.3,
+    "crest_db": 8.3
+   },
+   {
+    "t": 22.14,
+    "peak_db": -1.6,
+    "crest_db": 9.4
+   },
+   {
+    "t": 22.73,
+    "peak_db": -3.1,
+    "crest_db": 9.4
+   },
+   {
+    "t": 23.31,
+    "peak_db": -2.5,
+    "crest_db": 8.6
+   },
+   {
+    "t": 23.89,
+    "peak_db": -2.7,
+    "crest_db": 8.2
+   },
+   {
+    "t": 24.48,
+    "peak_db": -2.8,
+    "crest_db": 9.0
+   },
+   {
+    "t": 25.06,
+    "peak_db": -2.7,
+    "crest_db": 8.8
+   },
+   {
+    "t": 25.64,
+    "peak_db": -4.4,
+    "crest_db": 8.3
+   },
+   {
+    "t": 26.23,
+    "peak_db": -8.6,
+    "crest_db": 11.0
+   },
+   {
+    "t": 26.81,
+    "peak_db": -15.8,
+    "crest_db": 10.2
+   },
+   {
+    "t": 27.39,
+    "peak_db": -29.3,
+    "crest_db": 9.4
+   }
+  ]
+ },
+ "sections": [
+  {
+   "label": "intro",
+   "start": 2.31,
+   "end": 6.97,
+   "seconds": 4.67,
+   "bands_db": {
+    "sub": -64.8,
+    "bass": -61.2,
+    "low_mid": -61.1,
+    "mid": -25.3,
+    "high_mid": -39.6,
+    "air": -50.8
+   },
+   "balance_vs_target": {
+    "sub": -40.8,
+    "bass": -42.2,
+    "low_mid": -38.1,
+    "mid": -4.3,
+    "high_mid": -14.6,
+    "air": -22.8
+   },
+   "mud_score": 0,
+   "harsh_score": 100,
+   "sub_weight_db": -3.6,
+   "punch_crest_db": 9.1,
+   "stereo": {
+    "low_corr": -0.01,
+    "mid_corr": 0.17,
+    "high_corr": -0.14,
+    "phase_risk": "high"
+   },
+   "archetypes": [
+    {
+     "guess": "piano / keys (harmonic, wideband)",
+     "score": 0.52,
+     "why": "odd/even 6.51, harmonicity 0.57, centroid 2554 Hz, attacks/s 3.0, decay slope 0.07"
+    },
+    {
+     "guess": "guitar (distorted / power chords)",
+     "score": 0.45,
+     "why": "odd/even 6.51, harmonicity 0.57, centroid 2554 Hz, attacks/s 3.0, decay slope 0.07"
+    },
+    {
+     "guess": "chip / 8-bit (narrow band, odd harmonics)",
+     "score": 0.4,
+     "why": "odd/even 6.51, harmonicity 0.57, centroid 2554 Hz, attacks/s 3.0, decay slope 0.07"
+    }
+   ]
+  },
+  {
+   "label": "drop",
+   "start": 6.97,
+   "end": 27.98,
+   "seconds": 21.0,
+   "bands_db": {
+    "sub": -16.2,
+    "bass": -18.5,
+    "low_mid": -23.6,
+    "mid": -24.9,
+    "high_mid": -39.0,
+    "air": -54.3
+   },
+   "balance_vs_target": {
+    "sub": 7.8,
+    "bass": 0.5,
+    "low_mid": -0.6,
+    "mid": -3.9,
+    "high_mid": -14.0,
+    "air": -26.3
+   },
+   "mud_score": 34,
+   "harsh_score": 57,
+   "sub_weight_db": 2.3,
+   "punch_crest_db": 8.8,
+   "stereo": {
+    "low_corr": 0.98,
+    "mid_corr": 0.1,
+    "high_corr": 0.04,
+    "phase_risk": "high"
+   },
+   "archetypes": [
+    {
+     "guess": "guitar (distorted / power chords)",
+     "score": 0.57,
+     "why": "odd/even 1.13, harmonicity 0.44, centroid 1707 Hz, attacks/s 2.5, decay slope 0.04"
+    },
+    {
+     "guess": "piano / keys (harmonic, wideband)",
+     "score": 0.45,
+     "why": "odd/even 1.13, harmonicity 0.44, centroid 1707 Hz, attacks/s 2.5, decay slope 0.04"
+    },
+    {
+     "guess": "bell / chime (inharmonic, long decay)",
+     "score": 0.38,
+     "why": "odd/even 1.13, harmonicity 0.44, centroid 1707 Hz, attacks/s 2.5, decay slope 0.04"
+    }
+   ]
+  }
+ ],
+ "issues": [
+  "intro 2.31-6.97 s: a band is close to mono-incompatible (corr {'low_corr': -0.01, 'mid_corr': 0.17, 'high_corr': -0.14, 'phase_risk': 'high'})",
+  "drop 6.97-27.98 s: a band is close to mono-incompatible (corr {'low_corr': 0.98, 'mid_corr': 0.1, 'high_corr': 0.04, 'phase_risk': 'high'})"
+ ],
+ "overrides": {
+  "mix": {
+   "hat": {
+    "gain_db": -14
+   }
+  },
+  "lead": {
+   "kw": {
+    "bright": 0.45
+   }
+  },
+  "dynamics": 0.7,
+  "lufs": -9.2
+ },
+ "override_why": [
+  {
+   "knob": "mix.hat.gain_db / lead.kw.bright",
+   "value": {
+    "hat_gain_db": -14,
+    "lead_bright": 0.45
+   },
+   "reason": "3-8 kHz harshness 59/100; tame hats and lead brightness"
+  },
+  {
+   "knob": "dynamics",
+   "value": 0.7,
+   "reason": "median beat crest is only 8.8 dB: the master is squashed"
+  },
+  {
+   "knob": "lufs",
+   "value": -9.2,
+   "reason": "match the reference's integrated loudness (compose already accepts lufs in a genre spec)"
+  }
+ ],
+ "suggested_command": "af.py compose --genre <base> --override '{\"mix\":{\"hat\":{\"gain_db\":-14}},\"lead\":{\"kw\":{\"bright\":0.45}},\"dynamics\":0.7,\"lufs\":-9.2}' --out adapted.wav",
+ "note": "Measurements from numpy/scipy. Archetypes are heuristics, not a classifier. Nothing here says the music sounds good: audition it."
+}

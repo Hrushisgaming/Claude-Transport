@@ -1,0 +1,13 @@
+0.4890	0.4890	full impact
+0.8340	11.8700	drop A
+11.7040	11.7040	full impact
+11.8700	11.8700	DROP
+11.8700	46.3600	drop B
+38.0820	38.0820	sub/kick impact
+46.3590	68.4300	drop C
+51.8750	51.8750	sub/kick impact
+65.6670	65.6670	sub/kick impact
+68.4300	71.1900	BREAKDOWN
+68.4320	71.1900	break D
+71.1910	73.9500	outro D'
+71.8800	71.8800	END CUT

@@ -1,0 +1,49 @@
+/* CANVAS layout + type. Every value is a token or a measured size (study, "Type"). */
+@font-face{font-family:'Inter';font-weight:500;src:url(fonts/Inter-500.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-weight:600;src:url(fonts/Inter-600.woff2) format('woff2')}
+@font-face{font-family:'Inter';font-weight:900;src:url(fonts/Inter-900.woff2) format('woff2')}
+@font-face{font-family:'Playfair Display';font-style:italic;font-weight:400 900;src:url(fonts/PlayfairDisplay-Italic-Var-latin.woff2) format('woff2')}
+html,body{margin:0;background:var(--cv-dark)}
+.cv-frame{position:relative;width:1920px;height:1080px;overflow:hidden;background:var(--cv-dark);container-type:size}
+.cv-defs{position:absolute;width:0;height:0}
+.cv-layer{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden}
+.cv-fill{position:absolute;left:0;top:0;width:1920px;height:1080px;object-fit:cover}
+.cv-drift{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:960px 540px}
+.cv-world{position:absolute;left:-192px;top:-108px;width:2304px;height:1296px;transform-origin:1152px 648px}
+.cv-ground{position:absolute;left:0;top:0;width:2304px;height:1296px}
+.cv-abs{position:absolute}
+/* the cinematic text block: rows of small + big words, centred on (x, y) */
+.cv-cap{position:absolute;transform:translate(-50%,-50%);display:flex;flex-direction:column;white-space:nowrap}
+.cv-row{display:flex;align-items:baseline}
+.cv-row.cv-l{justify-content:flex-start}.cv-row.cv-c{justify-content:center}.cv-row.cv-r{justify-content:flex-end}
+.cv-w{display:inline-block;transform-origin:50% 60%}
+.cv-w + .cv-w{margin-left:.24em}
+.cv-s{font-family:var(--cv-sans);font-weight:500;font-size:var(--cv-small);line-height:1.12;letter-spacing:-.005em}
+.cv-b{font-family:var(--cv-sans);font-weight:900;font-size:var(--cv-big);line-height:.9;letter-spacing:-.045em}
+.cv-i{font-family:var(--cv-serif);font-style:italic;font-weight:900;font-size:var(--cv-big);line-height:.92;letter-spacing:-.015em}
+.cv-q{font-family:var(--cv-serif);font-style:italic;font-weight:900;font-size:60px;line-height:.6;align-self:flex-start}
+.cv-w.cv-q + .cv-w{margin-left:.12em}
+.cv-light{color:var(--cv-white)}
+.cv-scrim{position:absolute;left:-30%;right:-30%;top:-55%;bottom:-55%;z-index:-1;background:radial-gradient(closest-side,var(--cv-scrim),transparent)}
+.cv-light .cv-w{text-shadow:0 2px 26px var(--cv-shadow)}
+.cv-ink{color:var(--cv-ink)}
+.cv-w.cv-blue{color:var(--cv-accent)}
+/* object scenes: a real photo with a white border */
+.cv-photo{position:absolute;background:var(--cv-photo);box-shadow:0 22px 50px var(--cv-photo-shadow),0 3px 8px var(--cv-photo-shadow);box-sizing:border-box}
+.cv-photo img{display:block;width:100%}
+/* graph */
+.cv-axis line{stroke:var(--cv-axis);stroke-width:2;filter:drop-shadow(0 0 4px var(--cv-axis-glow))}
+.cv-gline{stroke:var(--cv-gline);stroke-width:4;stroke-linejoin:round;stroke-linecap:round;filter:drop-shadow(0 0 7px var(--cv-axis-glow))}
+.cv-axlab{fill:var(--cv-axis);font-family:var(--cv-sans);font-weight:600;font-size:17px;letter-spacing:.22em}
+.cv-ball{position:absolute;width:24px;height:24px;border-radius:50%;background:var(--cv-ball);box-shadow:0 0 16px 6px var(--cv-glow),0 0 52px 18px var(--cv-glow-soft)}
+.cv-hl{position:absolute;background:var(--cv-accent)}
+.cv-quote{position:absolute;font-family:var(--cv-serif);font-style:italic;font-weight:900;font-size:64px;line-height:1}
+.cv-quote.cv-light{color:var(--cv-white)}.cv-quote.cv-ink{color:var(--cv-ink)}
+/* 9:16 short form (set_format('9x16')): the reel's own shape. Sizes measured at 1080x1920. */
+.cv-916.cv-frame{width:1080px;height:1920px;--cv-big:176px;--cv-small:44px}
+.cv-916 .cv-layer,.cv-916 .cv-fill{width:1080px;height:1920px}
+.cv-916 .cv-drift{width:1080px;height:1920px;transform-origin:540px 960px}
+.cv-916 .cv-world{left:-108px;top:-192px;width:1296px;height:2304px;transform-origin:648px 1152px}
+.cv-916 .cv-ground{width:1296px;height:2304px}
+.cv-916 .cv-q{font-size:84px}
+.cv-916 .cv-axlab{font-size:24px}

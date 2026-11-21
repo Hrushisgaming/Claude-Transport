@@ -1,0 +1,25 @@
+/* CANVAS tokens. Colours sampled from full-resolution frames of the reference reel (study, "Look"). */
+:root{
+  --cv-paper:#eeecf0;        /* paper scenes: #edebef / #e6e6f0 / #f9f6fa */
+  --cv-ink:#121212;          /* type on paper */
+  --cv-dark:#161818;         /* graph + line scenes: #191a1a / #141616 */
+  --cv-white:#f6f5f8;        /* type on footage, paintings, dark, blue */
+  --cv-blue:#2148e0;         /* the blue ground and the cut-out figure: #1f4beb..#2f5ef4, #2045de */
+  --cv-blue-deep:#0a1643;    /* quote-scene vignette corners */
+  --cv-accent:#1f56e6;       /* blue words on paper (French horn, PhD), the highlighter box */
+  --cv-line:#1466e0;         /* the thick line: #0b67df */
+  --cv-ball:#4a90ff;         /* the graph ball core */
+  --cv-glow:rgba(40,120,255,.75);
+  --cv-glow-soft:rgba(30,100,255,.32);
+  --cv-shadow:rgba(0,0,0,.45);
+  --cv-scrim:rgba(0,0,0,.5);
+  --cv-photo:#fbfaf7;        /* photo border */
+  --cv-photo-shadow:rgba(0,0,0,.22);
+  --cv-axis:rgba(255,255,255,.55);
+  --cv-axis-glow:rgba(255,255,255,.5);
+  --cv-gline:#f2f4ff;
+  --cv-sans:'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --cv-serif:'Playfair Display', Georgia, serif;
+  --cv-big:124px;            /* key word */
+  --cv-small:32px;           /* surrounding words */
+}

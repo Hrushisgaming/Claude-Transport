@@ -1,0 +1,349 @@
+{
+ "schema": "style-copy/audio-dna@2",
+ "name": "a-grave-soul-now-run",
+ "kind": "audio",
+ "seconds": 73.2,
+ "tempo": {
+  "bpm": 164.0,
+  "alt_octaves": [
+   328.0,
+   82.0
+  ],
+  "steady": true,
+  "ambiguous": true,
+  "beats_per_bar": 4,
+  "swing": 0.0
+ },
+ "key": {
+  "tonic": "B",
+  "mode": "minor",
+  "relative": "D major"
+ },
+ "harmony": {
+  "power_chord_share": 0.0,
+  "third_share": 0.98,
+  "chord_changes_per_bar": 0.62,
+  "common_degrees": [
+   "V",
+   "I",
+   "bVII",
+   "bIII"
+  ],
+  "example_loop_FLAVOUR_ONLY": [
+   "V",
+   "I",
+   "V",
+   "V"
+  ],
+  "note": "reduced on purpose: mode + vocabulary + change rate. Write a new progression."
+ },
+ "rhythm": {
+  "onsets_per_sec": 6.84,
+  "onsets_per_beat": 2.5,
+  "step16_density": [
+   1.0,
+   0.1,
+   0.87,
+   0.62,
+   0.94,
+   0.17,
+   0.94,
+   0.25,
+   0.83,
+   0.35,
+   0.83,
+   0.12,
+   0.94,
+   0.12,
+   0.87,
+   0.42
+  ],
+  "grid_confidence": 0.9,
+  "kick": "Xoxxx.Xoxxxox.oo",
+  "snare": "X.xoX.X.xox.X.x.",
+  "hat": "X.x.x.X.xox.X.xo",
+  "sustain_ms": 115.0
+ },
+ "timbre": {
+  "centroid_hz": 2369.3,
+  "rolloff85_hz": 796.7,
+  "flatness": 0.5502,
+  "hf_ratio_db": -8.9,
+  "harmonic_ratio": 0.564,
+  "bands_db": {
+   "sub": -10.5,
+   "bass": -3.1,
+   "low_mid": -7.5,
+   "mid": -9.2,
+   "high_mid": -11.4,
+   "air": -20.2
+  }
+ },
+ "mix": {
+  "lufs": -12.6,
+  "lra": 3.2,
+  "true_peak_db": -2.0,
+  "crest_db": 12.5,
+  "rms_db": -15.91,
+  "side_to_mid_db": -7.09,
+  "lr_correlation": 0.669,
+  "band_correlation": {
+   "low": 0.79,
+   "mid": 0.6,
+   "high": 0.45
+  }
+ },
+ "structure": {
+  "sections": [
+   {
+    "label": "intro",
+    "bars": 9,
+    "start": 0.029,
+    "end": 13.2,
+    "energy": 0.17
+   },
+   {
+    "label": "drop",
+    "bars": 16,
+    "start": 13.2,
+    "end": 36.614,
+    "energy": 1.0
+   },
+   {
+    "label": "break",
+    "bars": 8,
+    "start": 36.614,
+    "end": 48.322,
+    "energy": 0.24
+   },
+   {
+    "label": "outro",
+    "bars": 17,
+    "start": 48.322,
+    "end": 73.2,
+    "energy": 0.0
+   }
+  ],
+  "drops": [
+   13.2
+  ],
+  "energy_per_bar_db": [
+   -6.2,
+   -2.4,
+   -3.7,
+   -3.2,
+   -3.4,
+   -2.1,
+   -3.7,
+   -3.4,
+   -2.0,
+   -0.6,
+   -1.9,
+   -1.8,
+   -1.5,
+   -0.8,
+   -1.9,
+   -2.0,
+   -1.5,
+   -1.2,
+   -2.9,
+   -2.7,
+   -2.2,
+   -0.6,
+   -1.7,
+   -1.4,
+   -0.9,
+   -1.8,
+   -4.1,
+   -4.3,
+   -4.0,
+   -1.7,
+   -3.4,
+   -3.1,
+   -2.9,
+   -0.7,
+   -0.9,
+   -0.3,
+   -1.1,
+   -1.5,
+   -1.0,
+   0.0,
+   -1.4,
+   -1.3,
+   -1.1,
+   -0.5,
+   -1.3,
+   -1.1,
+   -1.0,
+   -4.3,
+   -13.4,
+   -31.6
+  ]
+ },
+ "guesses": [
+  "distortion: high (flatness 0.5502, 3-8k vs 0.2-3k -8.9 dB)",
+  "articulation: muted / staccato (median 12 dB fall 115.0 ms)",
+  "chords: full chords with thirds",
+  "drums: probably yes (kick Xoxxx.Xoxxxox.oo, snare X.xoX.X.xox.X.x.; from a full mix, approximate)"
+ ],
+ "analyzer_summary": "164 BPM (steady), 4/4, B minor, ~metal-like, -12.6 LUFS, swing 0.0, kick Xoxxx.Xoxxxox.oo, 4 sections, drops at [13.2]",
+ "analyzer_genre_guess": [
+  "metal",
+  "horror_chase",
+  "edm"
+ ],
+ "deep": {
+  "tempo_feel": {
+   "analyzer_bpm": 164.0,
+   "feel_bpm": 164.0,
+   "attacks_per_beat_at_feel": 2.55,
+   "confidence": "high",
+   "other": [
+    82.0
+   ],
+   "note": "attacks-per-beat heuristic (about 2 per beat feels 'normal'); half/double time is a human call: ask which tempo they tap"
+  },
+  "hard_points": {
+   "drops": [
+    {
+     "bar": 9,
+     "t": 11.736,
+     "pct": 16.0,
+     "jump_db": 2.3,
+     "bass_jump_db": 2.6,
+     "has_cut": false,
+     "has_riser": false,
+     "impact": null,
+     "anatomy": "bass +2.6 dB, brightness +655 Hz"
+    },
+    {
+     "bar": 34,
+     "t": 48.322,
+     "pct": 66.0,
+     "jump_db": 2.2,
+     "bass_jump_db": 2.3,
+     "has_cut": false,
+     "has_riser": false,
+     "impact": null,
+     "anatomy": "bass +2.3 dB, brightness -27 Hz"
+    }
+   ],
+   "hits_per_min": 0.8,
+   "stops_per_min": 0.0,
+   "hit_types": {
+    "full impact": 1,
+    "sub/kick impact": 0,
+    "crash/high burst": 0,
+    "accent": 0
+   },
+   "hits_on_16th_grid_share": 1.0,
+   "hits_on_beat1_share": 1.0,
+   "risers": [],
+   "stops": [],
+   "starts_hot": false
+  },
+  "form": {
+   "sequence": "A B C D",
+   "sections": [
+    {
+     "label": "build",
+     "form": "A",
+     "start_bar": 1,
+     "bars": 8,
+     "pct": 16.0,
+     "energy_rel_db": -3.5,
+     "onsets_per_beat": 1.78
+    },
+    {
+     "label": "drop",
+     "form": "B",
+     "start_bar": 9,
+     "bars": 10,
+     "pct": 20.0,
+     "energy_rel_db": -1.5,
+     "onsets_per_beat": 2.83
+    },
+    {
+     "label": "drop",
+     "form": "C",
+     "start_bar": 19,
+     "bars": 15,
+     "pct": 30.0,
+     "energy_rel_db": -2.5,
+     "onsets_per_beat": 2.8
+    },
+    {
+     "label": "outro",
+     "form": "D",
+     "start_bar": 34,
+     "bars": 17,
+     "pct": 34.0,
+     "energy_rel_db": -3.7,
+     "onsets_per_beat": 2.54
+    }
+   ],
+   "chord_cycle_bars": 8
+  },
+  "layer_moves": [
+   {
+    "bar": 9,
+    "section": "drop",
+    "moves": [
+     "+sub 4dB",
+     "+air 7dB"
+    ]
+   },
+   {
+    "bar": 19,
+    "section": "drop",
+    "moves": []
+   },
+   {
+    "bar": 34,
+    "section": "outro",
+    "moves": [
+     "+mid 4dB",
+     "+air 3dB"
+    ]
+   }
+  ],
+  "loop": {
+   "loop_ready": false,
+   "issues": [
+    "ends with 3.3 s of fade/silence: a looping Sound would play that gap every cycle",
+    "level jump at the seam: last 0.25 s -60 dB vs first 0.25 s -19 dB"
+   ],
+   "fade_out_s": 3.31,
+   "lead_in_s": 0.06
+  },
+  "lead_layer": {
+   "share_of_bars": 0.22,
+   "segments": [
+    {
+     "bar": 15,
+     "end_bar": 16
+    },
+    {
+     "bar": 37,
+     "end_bar": 39
+    },
+    {
+     "bar": 45,
+     "end_bar": 46
+    }
+   ]
+  },
+  "role_guess": {
+   "role": "chase / last-man-standing (fast, driving)",
+   "reasons": [
+    "feel 164 BPM with 2.5 attacks per beat",
+    "minor mode"
+   ],
+   "heuristic": true
+  },
+  "grid": {
+   "downbeat_phase_confidence": 0.36,
+   "steady": true
+  }
+ }
+}

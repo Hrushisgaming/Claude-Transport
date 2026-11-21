@@ -1,0 +1,68 @@
+{
+ "style": "roblox-lms-family",
+ "bpm": 176.0,
+ "key": "A minor",
+ "bars": 64,
+ "seconds": 87.3,
+ "sections": [
+  {
+   "label": "build",
+   "compose": "build",
+   "start_bar": 1,
+   "bars": 10,
+   "energy_rel_db": -3.5,
+   "form": "A",
+   "layers": []
+  },
+  {
+   "label": "drop",
+   "compose": "drop",
+   "start_bar": 11,
+   "bars": 13,
+   "energy_rel_db": -1.5,
+   "form": "B",
+   "layers": [
+    "+sub 4dB",
+    "+air 7dB"
+   ]
+  },
+  {
+   "label": "drop",
+   "compose": "drop",
+   "start_bar": 24,
+   "bars": 19,
+   "energy_rel_db": -2.5,
+   "form": "C",
+   "layers": []
+  },
+  {
+   "label": "outro",
+   "compose": "outro",
+   "start_bar": 43,
+   "bars": 22,
+   "energy_rel_db": -3.7,
+   "form": "D",
+   "layers": [
+    "+mid 4dB",
+    "+air 3dB"
+   ]
+  }
+ ],
+ "events": [
+  {
+   "bar": 11,
+   "kind": "DROP",
+   "detail": "bass/sub entry about +3 dB",
+   "reference_anatomy": "bass +2.6 dB, brightness +655 Hz"
+  },
+  {
+   "bar": 43,
+   "kind": "DROP",
+   "detail": "bass/sub entry about +2 dB",
+   "reference_anatomy": "bass +2.3 dB, brightness -27 Hz"
+  }
+ ],
+ "hard_hits_total": 2,
+ "compose_plan": "[[\"build\", 0.156], [\"drop\", 0.203], [\"drop\", 0.297], [\"outro\", 0.344]]",
+ "command": "python3 af.py compose --genre roblox_lms_family --bars 64 --bpm 176 --plan '[[\"build\", 0.156], [\"drop\", 0.203], [\"drop\", 0.297], [\"outro\", 0.344]]' --out cand.wav"
+}

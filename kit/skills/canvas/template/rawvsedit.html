@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=1920, height=1080">
+<title>Raw vs Final Edit</title>
+<link rel="stylesheet" href="assets/cv/tokens.css">
+<link rel="stylesheet" href="assets/cv/canvas.css">
+<script src="assets/cv/vendor/gsap.min.js"></script>
+<style>
+.hk-ground{position:absolute;left:0;top:0;width:1920px;height:1080px;background:var(--cv-paper)}
+.hk-ground img{position:absolute;left:-192px;top:-108px;width:2304px;height:1296px;opacity:.9}
+.hk-tl{position:absolute;left:0;top:740px;width:1920px;height:340px;background:var(--cv-dark)}
+.hk-tl .row{position:absolute;left:0;width:1920px;height:58px;border-top:1px solid var(--cv-photo-shadow)}
+.hk-tl .rl{position:absolute;left:44px;font-family:var(--cv-sans);font-weight:600;font-size:16px;letter-spacing:.2em;color:var(--cv-axis);text-transform:uppercase}
+.hk-tl .tb{position:absolute;top:6px;height:46px;border-radius:6px;box-sizing:border-box;padding:0 10px;overflow:hidden;display:flex;align-items:center;font-family:var(--cv-sans);font-weight:600;font-size:15px;white-space:nowrap}
+.hk-tl .tb.acc{background:var(--cv-accent);color:var(--cv-white)}.hk-tl .tb.pap{background:var(--cv-paper);color:var(--cv-ink)}
+.hk-tl .tb.drk{background:var(--cv-gline);color:var(--cv-ink)}.hk-tl .tb.blu{background:var(--cv-blue);color:var(--cv-white)}
+.hk-tl .tb.cam{background:var(--cv-axis);color:var(--cv-ink)}
+.hk-tl svg.v rect{fill:var(--cv-ball)}.hk-tl svg.b rect{fill:var(--cv-axis)}
+.hk-tl .tick{position:absolute;top:10px;width:1px;height:14px;background:var(--cv-axis)}
+.hk-tl .tick span{position:absolute;left:6px;top:-2px;font-family:var(--cv-sans);font-weight:500;font-size:14px;color:var(--cv-axis)}
+.hk-ph{position:absolute;top:748px;left:0;width:3px;height:322px;background:var(--cv-ball);box-shadow:0 0 14px var(--cv-glow)}
+.hk-ph:before{content:"";position:absolute;left:-8px;top:-6px;width:19px;height:14px;border-radius:3px;background:var(--cv-ball)}
+.hk-pl{position:absolute;width:{{PW}}px;height:{{PH}}px;border-radius:18px;border:3px solid var(--cv-accent);box-sizing:border-box;overflow:hidden;background:var(--cv-dark);box-shadow:0 30px 70px var(--cv-photo-shadow)}
+.hk-pl video{position:absolute;left:0;top:0;width:{{PW6}}px;height:{{PH6}}px;object-fit:cover}
+.hk-pill{position:absolute;transform:translate(-50%,-50%);padding:10px 34px;border-radius:999px;background:var(--cv-accent);color:var(--cv-white);font-family:var(--cv-sans);font-weight:700;font-size:30px;box-shadow:0 8px 24px var(--cv-glow-soft);white-space:nowrap}
+</style></head>
+<body>
+<div id="root" class="cv-frame" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="{{DUR}}">
+<div id="ground" class="clip cv-layer" data-start="0" data-duration="{{DUR}}" style="z-index:1"><div class="hk-ground"><img src="assets/cv/tex/paper.jpg" alt=""></div>
+<div class="hk-tl">
+  <div class="row" style="top:0;height:34px;border:none">{{RULER}}</div>
+  <div class="row" style="top:34px"><span class="rl" style="top:20px">Graphics</span>{{BLOCKS}}</div>
+  <div class="row" style="top:96px"><span class="rl" style="top:20px">Camera</span><div class="tb cam" style="left:{{X0}}px;width:{{TLW}}px"><span>the take, cut</span></div></div>
+  <div class="row" style="top:158px"><span class="rl" style="top:20px">Voice</span><svg class="v" style="position:absolute;left:{{X0}}px;top:7px" width="{{TLW}}" height="44">{{WAVV}}</svg></div>
+  <div class="row" style="top:220px"><span class="rl" style="top:20px">Music</span><svg class="b" style="position:absolute;left:{{X0}}px;top:7px" width="{{TLW}}" height="44">{{WAVB}}</svg></div>
+  <div class="row" style="top:282px"></div>
+</div>
+<div id="ph" class="hk-ph" style="left:{{X0}}px"></div>
+</div>
+<div id="plL" class="hk-pl clip" data-start="0" data-duration="{{DUR}}" style="left:{{LX}}px;top:{{PY}}px;z-index:5">
+  <video id="vraw" class="clip" src="assets/raw.mp4" muted playsinline data-start="0" data-duration="{{DUR}}" data-media-start="0"></video></div>
+<div id="plR" class="hk-pl clip" data-start="0" data-duration="{{DUR}}" style="left:{{RX}}px;top:{{PY}}px;z-index:5">
+  <video id="ved" class="clip" src="assets/edited.mp4" muted playsinline data-start="0" data-duration="{{DUR}}" data-media-start="0"></video></div>
+<div id="lab" class="clip cv-layer" data-start="0" data-duration="{{DUR}}" style="z-index:8">
+  <div class="hk-pill" style="left:{{LC}}px;top:{{PY}}px">{{LEFT}}</div>
+  <div class="hk-pill" style="left:{{RC}}px;top:{{PY}}px">{{RIGHT}}</div>
+</div>
+</div>
+<script>
+const tl = gsap.timeline({ paused: true });
+tl.fromTo("#ph",{x:0},{x:{{TLW}},duration:{{DUR}},ease:"none",immediateRender:false},0);
+window.__timelines["main"] = tl;
+</script>
+</body></html>

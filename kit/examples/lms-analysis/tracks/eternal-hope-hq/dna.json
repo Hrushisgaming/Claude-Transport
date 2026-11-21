@@ -1,0 +1,322 @@
+{
+ "schema": "style-copy/audio-dna@2",
+ "name": "eternal-hope-hq",
+ "kind": "audio",
+ "seconds": 73.4,
+ "tempo": {
+  "bpm": 173.97,
+  "alt_octaves": [
+   347.9,
+   87.0
+  ],
+  "steady": true,
+  "ambiguous": true,
+  "beats_per_bar": 4,
+  "swing": 0.011
+ },
+ "key": {
+  "tonic": "A",
+  "mode": "minor",
+  "relative": "C major"
+ },
+ "harmony": {
+  "power_chord_share": 0.0,
+  "third_share": 0.92,
+  "chord_changes_per_bar": 0.37,
+  "common_degrees": [
+   "I",
+   "II",
+   "V",
+   "VII"
+  ],
+  "example_loop_FLAVOUR_ONLY": [
+   "I",
+   "IV",
+   "IV",
+   "II"
+  ],
+  "note": "reduced on purpose: mode + vocabulary + change rate. Write a new progression."
+ },
+ "rhythm": {
+  "onsets_per_sec": 5.5,
+  "onsets_per_beat": 1.9,
+  "step16_density": [
+   0.85,
+   0.02,
+   0.85,
+   0.02,
+   1.0,
+   0.02,
+   1.0,
+   0.0,
+   0.8,
+   0.22,
+   0.57,
+   0.0,
+   0.95,
+   0.02,
+   0.6,
+   0.35
+  ],
+  "grid_confidence": 0.72,
+  "kick": "Xx..ooXo.xx.xo.o",
+  "snare": "X.X.X.x.XoX.X.xo",
+  "hat": "X.x.X.x.X.x.X.xo",
+  "sustain_ms": 165.0
+ },
+ "timbre": {
+  "centroid_hz": 3030.9,
+  "rolloff85_hz": 1184.3,
+  "flatness": 0.7019,
+  "hf_ratio_db": -5.5,
+  "harmonic_ratio": 0.586,
+  "bands_db": {
+   "sub": -7.1,
+   "bass": -2.8,
+   "low_mid": -13.0,
+   "mid": -9.0,
+   "high_mid": -10.9,
+   "air": -15.9
+  }
+ },
+ "mix": {
+  "lufs": -14.6,
+  "lra": 1.7,
+  "true_peak_db": -0.3,
+  "crest_db": 16.79,
+  "rms_db": -17.59,
+  "side_to_mid_db": -7.22,
+  "lr_correlation": 0.681,
+  "band_correlation": {
+   "low": 0.72,
+   "mid": 0.58,
+   "high": 0.85
+  }
+ },
+ "structure": {
+  "sections": [
+   {
+    "label": "build",
+    "bars": 9,
+    "start": 0.835,
+    "end": 13.251,
+    "energy": 0.62
+   },
+   {
+    "label": "drop",
+    "bars": 7,
+    "start": 13.251,
+    "end": 22.907,
+    "energy": 0.82
+   },
+   {
+    "label": "drop",
+    "bars": 8,
+    "start": 22.907,
+    "end": 33.943,
+    "energy": 1.0
+   },
+   {
+    "label": "drop",
+    "bars": 24,
+    "start": 33.943,
+    "end": 67.052,
+    "energy": 0.74
+   },
+   {
+    "label": "outro",
+    "bars": 4,
+    "start": 67.052,
+    "end": 72.57,
+    "energy": 0.0
+   }
+  ],
+  "drops": [
+   13.251
+  ],
+  "energy_per_bar_db": [
+   -1.0,
+   -3.5,
+   -1.5,
+   -3.3,
+   -2.0,
+   -4.1,
+   -2.7,
+   -4.2,
+   -1.3,
+   -1.1,
+   -1.4,
+   -1.2,
+   -1.6,
+   -1.7,
+   -1.8,
+   -1.4,
+   0.0,
+   -0.2,
+   -0.8,
+   -0.3,
+   -0.7,
+   -0.4,
+   -0.8,
+   -0.4,
+   -1.1,
+   -1.6,
+   -1.9,
+   -1.8,
+   -2.1,
+   -2.0,
+   -2.3,
+   -2.1,
+   -2.2,
+   -1.3,
+   -1.8,
+   -1.7,
+   -2.0,
+   -1.7,
+   -2.3,
+   -1.8,
+   -1.6,
+   -1.8,
+   -2.3,
+   -2.0,
+   -2.3,
+   -1.9,
+   -2.3,
+   -2.0,
+   -2.4,
+   -7.8,
+   -9.4,
+   -4.7
+  ]
+ },
+ "guesses": [
+  "distortion: high (flatness 0.7019, 3-8k vs 0.2-3k -5.5 dB)",
+  "articulation: mixed (median 12 dB fall 165.0 ms)",
+  "chords: full chords with thirds",
+  "drums: probably yes (kick Xx..ooXo.xx.xo.o, snare X.X.X.x.XoX.X.xo; from a full mix, approximate)"
+ ],
+ "analyzer_summary": "174 BPM (steady), 4/4, A minor, ~metal-like, -14.6 LUFS, swing 0.011, kick Xx..ooXo.xx.xo.o, 5 sections, drops at [13.251]",
+ "analyzer_genre_guess": [
+  "metal",
+  "horror_chase",
+  "dnb"
+ ],
+ "deep": {
+  "tempo_feel": {
+   "analyzer_bpm": 174.0,
+   "feel_bpm": 174.0,
+   "attacks_per_beat_at_feel": 1.91,
+   "confidence": "medium",
+   "other": [
+    87.0
+   ],
+   "note": "attacks-per-beat heuristic (about 2 per beat feels 'normal'); half/double time is a human call: ask which tempo they tap"
+  },
+  "hard_points": {
+   "drops": [
+    {
+     "bar": 9,
+     "t": 11.87,
+     "pct": 16.2,
+     "jump_db": 2.2,
+     "bass_jump_db": 2.1,
+     "has_cut": false,
+     "has_riser": false,
+     "impact": "full impact",
+     "anatomy": "full impact (+9.4 dB, one-shot 1.88 s) -> bass +2.1 dB, brightness +518 Hz"
+    }
+   ],
+   "hits_per_min": 4.1,
+   "stops_per_min": 0.0,
+   "hit_types": {
+    "full impact": 2,
+    "sub/kick impact": 3,
+    "crash/high burst": 0,
+    "accent": 0
+   },
+   "hits_on_16th_grid_share": 1.0,
+   "hits_on_beat1_share": 0.6,
+   "risers": [],
+   "stops": [],
+   "starts_hot": false
+  },
+  "form": {
+   "sequence": "A B C",
+   "sections": [
+    {
+     "label": "drop",
+     "form": "A",
+     "start_bar": 1,
+     "bars": 8,
+     "pct": 15.1,
+     "energy_rel_db": -2.8,
+     "onsets_per_beat": 1.22
+    },
+    {
+     "label": "drop",
+     "form": "B",
+     "start_bar": 9,
+     "bars": 25,
+     "pct": 47.2,
+     "energy_rel_db": -1.3,
+     "onsets_per_beat": 2.22
+    },
+    {
+     "label": "outro",
+     "form": "C",
+     "start_bar": 34,
+     "bars": 20,
+     "pct": 37.7,
+     "energy_rel_db": -6.2,
+     "onsets_per_beat": 1.8
+    }
+   ],
+   "chord_cycle_bars": 4
+  },
+  "layer_moves": [
+   {
+    "bar": 9,
+    "section": "drop",
+    "moves": [
+     "+air 4dB"
+    ]
+   },
+   {
+    "bar": 34,
+    "section": "outro",
+    "moves": []
+   }
+  ],
+  "loop": {
+   "loop_ready": false,
+   "issues": [
+    "ends with 1.5 s of fade/silence: a looping Sound would play that gap every cycle",
+    "level jump at the seam: last 0.25 s -90 dB vs first 0.25 s -28 dB",
+    "length is 52.62 bars from the first downbeat (-527 ms from a whole bar): a loop would drift off the grid"
+   ],
+   "fade_out_s": 1.52,
+   "lead_in_s": 0.17
+  },
+  "lead_layer": {
+   "share_of_bars": 0.21,
+   "segments": [
+    {
+     "bar": 35,
+     "end_bar": 40
+    }
+   ]
+  },
+  "role_guess": {
+   "role": "chase / last-man-standing (fast, driving)",
+   "reasons": [
+    "feel 174 BPM with 1.9 attacks per beat",
+    "minor mode"
+   ],
+   "heuristic": true
+  },
+  "grid": {
+   "downbeat_phase_confidence": 0.48,
+   "steady": true
+  }
+ }
+}

@@ -1,0 +1,3 @@
+kind,time_s,end_s,bar,beat,pct,strength_db,detail
+end_cut,75.85,,31,1.47,98.3,45.0,"hard cut then decay, tail 1.34 s"
+drop,8.406,,4,1,10.9,3.2,"bass +4.2 dB, brightness -131 Hz"

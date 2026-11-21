@@ -1,0 +1,798 @@
+{
+ "schema": "style-copy/audio-dna@2",
+ "name": "lms-chase",
+ "kind": "audio",
+ "seconds": 76.7,
+ "tempo": {
+  "bpm": 175.0,
+  "alt_octaves": [
+   350.0,
+   87.5
+  ],
+  "steady": true,
+  "ambiguous": false,
+  "beats_per_bar": 4,
+  "swing": 0.007
+ },
+ "key": {
+  "tonic": "A",
+  "mode": "minor",
+  "relative": "D major"
+ },
+ "harmony": {
+  "power_chord_share": 0.0,
+  "third_share": 0.83,
+  "chord_changes_per_bar": 0.635,
+  "common_degrees": [
+   "V",
+   "I",
+   "bVII",
+   "bIII"
+  ],
+  "example_loop_FLAVOUR_ONLY": [
+   "V",
+   "I",
+   "V",
+   "V"
+  ],
+  "note": "reduced on purpose: mode + vocabulary + change rate. Write a new progression."
+ },
+ "rhythm": {
+  "onsets_per_sec": 6.545,
+  "onsets_per_beat": 2.37,
+  "step16_density": [
+   0.9,
+   0.435,
+   0.765,
+   0.375,
+   0.885,
+   0.57,
+   0.805,
+   0.315,
+   0.815,
+   0.34,
+   0.825,
+   0.385,
+   0.94,
+   0.655,
+   0.73,
+   0.385
+  ],
+  "grid_confidence": 0.76,
+  "kick": "Xoxxx.Xoxxxox.oo",
+  "snare": "X.xoX.X.xox.X.x.",
+  "hat": "X.x.x.X.xox.X.xo",
+  "sustain_ms": 122
+ },
+ "timbre": {
+  "centroid_hz": 2592.3,
+  "rolloff85_hz": 1119.7,
+  "flatness": 0.601,
+  "hf_ratio_db": -7.3,
+  "harmonic_ratio": 0.611,
+  "bands_db": {
+   "sub": -9.65,
+   "bass": -3.1,
+   "low_mid": -10.55,
+   "mid": -8.25,
+   "high_mid": -11.1,
+   "air": -18.5
+  }
+ },
+ "mix": {
+  "lufs": -12.05,
+  "lra": 4.1,
+  "true_peak_db": -0.05,
+  "crest_db": 14.24,
+  "rms_db": -15.51,
+  "side_to_mid_db": -8.4,
+  "lr_correlation": 0.748,
+  "band_correlation": {
+   "low": 0.85,
+   "mid": 0.665,
+   "high": 0.655
+  }
+ },
+ "structure": {
+  "sections": [
+   {
+    "label": "intro",
+    "bars": 9,
+    "start": 0.029,
+    "end": 13.2,
+    "energy": 0.17
+   },
+   {
+    "label": "drop",
+    "bars": 16,
+    "start": 13.2,
+    "end": 36.614,
+    "energy": 1.0
+   },
+   {
+    "label": "break",
+    "bars": 8,
+    "start": 36.614,
+    "end": 48.322,
+    "energy": 0.24
+   },
+   {
+    "label": "outro",
+    "bars": 17,
+    "start": 48.322,
+    "end": 73.2,
+    "energy": 0.0
+   }
+  ],
+  "drops": [
+   13.2
+  ],
+  "energy_per_bar_db": [
+   -6.2,
+   -2.4,
+   -3.7,
+   -3.2,
+   -3.4,
+   -2.1,
+   -3.7,
+   -3.4,
+   -2.0,
+   -0.6,
+   -1.9,
+   -1.8,
+   -1.5,
+   -0.8,
+   -1.9,
+   -2.0,
+   -1.5,
+   -1.2,
+   -2.9,
+   -2.7,
+   -2.2,
+   -0.6,
+   -1.7,
+   -1.4,
+   -0.9,
+   -1.8,
+   -4.1,
+   -4.3,
+   -4.0,
+   -1.7,
+   -3.4,
+   -3.1,
+   -2.9,
+   -0.7,
+   -0.9,
+   -0.3,
+   -1.1,
+   -1.5,
+   -1.0,
+   0.0,
+   -1.4,
+   -1.3,
+   -1.1,
+   -0.5,
+   -1.3,
+   -1.1,
+   -1.0,
+   -4.3,
+   -13.4,
+   -31.6
+  ]
+ },
+ "guesses": [
+  "distortion: high (flatness 0.5502, 3-8k vs 0.2-3k -8.9 dB)",
+  "articulation: muted / staccato (median 12 dB fall 115.0 ms)",
+  "chords: full chords with thirds",
+  "drums: probably yes (kick Xoxxx.Xoxxxox.oo, snare X.xoX.X.xox.X.x.; from a full mix, approximate)"
+ ],
+ "analyzer_summary": "164 BPM (steady), 4/4, B minor, ~metal-like, -12.6 LUFS, swing 0.0, kick Xoxxx.Xoxxxox.oo, 4 sections, drops at [13.2]",
+ "analyzer_genre_guess": [
+  "metal",
+  "horror_chase",
+  "edm"
+ ],
+ "deep": {
+  "tempo_feel": {
+   "analyzer_bpm": 169.0,
+   "feel_bpm": 175.0,
+   "attacks_per_beat_at_feel": 2.255,
+   "confidence": "high",
+   "other": [
+    88.75
+   ],
+   "note": "attacks-per-beat heuristic (about 2 per beat feels 'normal'); half/double time is a human call: ask which tempo they tap"
+  },
+  "hard_points": {
+   "drops": [
+    {
+     "bar": 9,
+     "t": 11.736,
+     "pct": 16.0,
+     "jump_db": 2.3,
+     "bass_jump_db": 2.6,
+     "has_cut": false,
+     "has_riser": false,
+     "impact": null,
+     "anatomy": "bass +2.6 dB, brightness +655 Hz"
+    },
+    {
+     "bar": 34,
+     "t": 48.322,
+     "pct": 66.0,
+     "jump_db": 2.2,
+     "bass_jump_db": 2.3,
+     "has_cut": false,
+     "has_riser": false,
+     "impact": null,
+     "anatomy": "bass +2.3 dB, brightness -27 Hz"
+    }
+   ],
+   "hits_per_min": 1.5,
+   "stops_per_min": 0.0,
+   "hit_types": {
+    "full impact": 1,
+    "sub/kick impact": 0,
+    "crash/high burst": 0,
+    "accent": 0
+   },
+   "hits_on_16th_grid_share": 1,
+   "hits_on_beat1_share": 0.85,
+   "risers": [],
+   "stops": [],
+   "starts_hot": false,
+   "breakdowns": [
+    {
+     "t": 38.08,
+     "bars": 4,
+     "depth_db": 2.3,
+     "bass_drop_db": 2.0,
+     "pct": 52.0,
+     "leads_into_drop": true
+    }
+   ],
+   "builds": [
+    {
+     "t": 43.93,
+     "bars": 3,
+     "onset_density_rise": 0.4,
+     "level_slope_db_per_bar": 0.23,
+     "pct": 60.0
+    }
+   ],
+   "tail": {
+    "t_cut": 73.54,
+    "tail_s": 2.92,
+    "kind": "hard cut then decay",
+    "pct": 96.2,
+    "fall_db_in_1s": 9.7
+   }
+  },
+  "form": {
+   "sequence": "A B C C' C' D E",
+   "sections": [
+    {
+     "label": "build",
+     "form": "A",
+     "start_bar": 1,
+     "bars": 8,
+     "pct": 16.0,
+     "energy_rel_db": -3.5,
+     "onsets_per_beat": 1.78
+    },
+    {
+     "label": "drop",
+     "form": "B",
+     "start_bar": 9,
+     "bars": 10,
+     "pct": 20.0,
+     "energy_rel_db": -1.5,
+     "onsets_per_beat": 2.83
+    },
+    {
+     "label": "drop",
+     "form": "C",
+     "start_bar": 19,
+     "bars": 8,
+     "pct": 16.0,
+     "energy_rel_db": -1.8,
+     "onsets_per_beat": 2.75
+    },
+    {
+     "label": "break",
+     "form": "C'",
+     "start_bar": 27,
+     "bars": 4,
+     "pct": 8.0,
+     "energy_rel_db": -3.5,
+     "onsets_per_beat": 2.69
+    },
+    {
+     "label": "build",
+     "form": "C'",
+     "start_bar": 31,
+     "bars": 3,
+     "pct": 6.0,
+     "energy_rel_db": -3.1,
+     "onsets_per_beat": 3.08
+    },
+    {
+     "label": "drop",
+     "form": "D",
+     "start_bar": 34,
+     "bars": 14,
+     "pct": 28.0,
+     "energy_rel_db": -0.9,
+     "onsets_per_beat": 2.96
+    },
+    {
+     "label": "outro",
+     "form": "E",
+     "start_bar": 48,
+     "bars": 3,
+     "pct": 6.0,
+     "energy_rel_db": -16.4,
+     "onsets_per_beat": 0.58
+    }
+   ],
+   "chord_cycle_bars": 4
+  },
+  "layer_moves": [
+   {
+    "bar": 9,
+    "section": "drop",
+    "moves": [
+     "+sub 4dB",
+     "+air 7dB"
+    ]
+   },
+   {
+    "bar": 19,
+    "section": "drop",
+    "moves": []
+   },
+   {
+    "bar": 27,
+    "section": "break",
+    "moves": [
+     "-lowmid 4dB",
+     "-highmid 4dB",
+     "-air 4dB"
+    ]
+   },
+   {
+    "bar": 31,
+    "section": "build",
+    "moves": []
+   },
+   {
+    "bar": 34,
+    "section": "drop",
+    "moves": [
+     "+mid 4dB",
+     "+air 3dB"
+    ]
+   },
+   {
+    "bar": 48,
+    "section": "outro",
+    "moves": [
+     "-sub 8dB",
+     "-bass 7dB",
+     "-lowmid 9dB",
+     "-mid 10dB",
+     "-highmid 8dB",
+     "-air 7dB"
+    ]
+   }
+  ],
+  "loop": {
+   "loop_ready": false,
+   "issues": [
+    "ends with 3.3 s of fade/silence: a looping Sound would play that gap every cycle",
+    "level jump at the seam: last 0.25 s -60 dB vs first 0.25 s -19 dB"
+   ],
+   "fade_out_s": 1.82,
+   "lead_in_s": 0.11
+  },
+  "lead_layer": {
+   "share_of_bars": 0.23,
+   "segments": [
+    {
+     "bar": 15,
+     "end_bar": 16
+    },
+    {
+     "bar": 37,
+     "end_bar": 39
+    },
+    {
+     "bar": 45,
+     "end_bar": 46
+    }
+   ]
+  },
+  "role_guess": {
+   "role": "chase / last-man-standing (fast, driving)",
+   "reasons": [
+    "feel 164 BPM with 2.5 attacks per beat",
+    "minor mode"
+   ],
+   "heuristic": true
+  },
+  "grid": {
+   "downbeat_phase_confidence": 0.415,
+   "steady": true
+  }
+ },
+ "family": {
+  "members": [
+   "necrobloxians",
+   "vigilante",
+   "onebounce",
+   "eternityv2",
+   "eternity_forsakened",
+   "agravesoul",
+   "eternalhope",
+   "lmsy2k"
+  ],
+  "medoid": "agravesoul",
+  "ranges": {
+   "tempo.bpm": [
+    96.5,
+    168.985,
+    179.98
+   ],
+   "tempo.beats_per_bar": [
+    4.0,
+    4.0,
+    4.0
+   ],
+   "tempo.swing": [
+    0.0,
+    0.007,
+    0.026
+   ],
+   "harmony.power_chord_share": [
+    0.0,
+    0.0,
+    0.17
+   ],
+   "harmony.third_share": [
+    0.39,
+    0.83,
+    0.98
+   ],
+   "harmony.chord_changes_per_bar": [
+    0.11,
+    0.635,
+    0.77
+   ],
+   "rhythm.onsets_per_sec": [
+    5.2,
+    6.545,
+    6.93
+   ],
+   "rhythm.onsets_per_beat": [
+    1.73,
+    2.37,
+    4.31
+   ],
+   "rhythm.grid_confidence": [
+    0.38,
+    0.76,
+    0.95
+   ],
+   "rhythm.sustain_ms": [
+    90.0,
+    122.5,
+    165.0
+   ],
+   "timbre.centroid_hz": [
+    2193.8,
+    2592.3,
+    3030.9
+   ],
+   "timbre.rolloff85_hz": [
+    409.1,
+    1119.7,
+    2325.6
+   ],
+   "timbre.flatness": [
+    0.482,
+    0.601,
+    0.702
+   ],
+   "timbre.hf_ratio_db": [
+    -13.5,
+    -7.3,
+    -4.9
+   ],
+   "timbre.harmonic_ratio": [
+    0.535,
+    0.611,
+    0.684
+   ],
+   "timbre.bands_db.sub": [
+    -15.4,
+    -9.65,
+    -5.8
+   ],
+   "timbre.bands_db.bass": [
+    -3.7,
+    -3.1,
+    -1.9
+   ],
+   "timbre.bands_db.low_mid": [
+    -13.0,
+    -10.55,
+    -7.5
+   ],
+   "timbre.bands_db.mid": [
+    -11.1,
+    -8.25,
+    -5.9
+   ],
+   "timbre.bands_db.high_mid": [
+    -14.7,
+    -11.1,
+    -8.2
+   ],
+   "timbre.bands_db.air": [
+    -23.5,
+    -18.5,
+    -15.3
+   ],
+   "mix.lufs": [
+    -15.0,
+    -12.05,
+    -7.6
+   ],
+   "mix.lra": [
+    1.7,
+    4.1,
+    7.7
+   ],
+   "mix.true_peak_db": [
+    -2.0,
+    -0.05,
+    1.4
+   ],
+   "mix.crest_db": [
+    10.8,
+    14.24,
+    16.99
+   ],
+   "mix.rms_db": [
+    -17.94,
+    -15.51,
+    -10.62
+   ],
+   "mix.side_to_mid_db": [
+    -12.93,
+    -8.4,
+    -5.61
+   ],
+   "mix.lr_correlation": [
+    0.569,
+    0.748,
+    0.903
+   ],
+   "mix.band_correlation.low": [
+    0.72,
+    0.85,
+    1.0
+   ],
+   "mix.band_correlation.mid": [
+    0.41,
+    0.665,
+    0.86
+   ],
+   "mix.band_correlation.high": [
+    0.4,
+    0.655,
+    0.85
+   ],
+   "deep.tempo_feel.analyzer_bpm": [
+    96.5,
+    169.0,
+    180.0
+   ],
+   "deep.tempo_feel.feel_bpm": [
+    120.0,
+    177.5,
+    200.0
+   ],
+   "deep.tempo_feel.attacks_per_beat_at_feel": [
+    1.85,
+    2.255,
+    2.77
+   ],
+   "deep.hard_points.hits_per_min": [
+    0.0,
+    1.5,
+    8.0
+   ],
+   "deep.hard_points.stops_per_min": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "deep.hard_points.hit_types.full impact": [
+    0.0,
+    1.5,
+    7.0
+   ],
+   "deep.hard_points.hit_types.sub/kick impact": [
+    0.0,
+    0.0,
+    3.0
+   ],
+   "deep.hard_points.hit_types.crash/high burst": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "deep.hard_points.hit_types.accent": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "deep.hard_points.hits_on_16th_grid_share": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "deep.hard_points.hits_on_beat1_share": [
+    0.33,
+    0.85,
+    1.0
+   ],
+   "deep.hard_points.tail.t_cut": [
+    69.85,
+    73.54,
+    75.85
+   ],
+   "deep.hard_points.tail.tail_s": [
+    1.34,
+    2.92,
+    6.58
+   ],
+   "deep.hard_points.tail.pct": [
+    91.8,
+    96.2,
+    98.3
+   ],
+   "deep.hard_points.tail.fall_db_in_1s": [
+    3.7,
+    9.7,
+    69.4
+   ],
+   "deep.form.chord_cycle_bars": [
+    4.0,
+    4.0,
+    16.0
+   ],
+   "deep.loop.fade_out_s": [
+    0.35,
+    1.82,
+    5.79
+   ],
+   "deep.loop.lead_in_s": [
+    0.02,
+    0.11,
+    4.93
+   ],
+   "deep.lead_layer.share_of_bars": [
+    0.1,
+    0.23,
+    0.38
+   ],
+   "deep.grid.downbeat_phase_confidence": [
+    0.22,
+    0.415,
+    0.68
+   ]
+  },
+  "consensus": {
+   "members_with_drop": 8,
+   "first_drop_pct": [
+    4.6,
+    9.8,
+    16.2
+   ],
+   "drop_has_cut_share": 0.0,
+   "drop_has_riser_share": 0.0,
+   "drop_has_impact_share": 0.59,
+   "drops_per_track": [
+    1,
+    6
+   ],
+   "section_pct_median": {
+    "build": {
+     "median_pct": 16.4,
+     "in_tracks": 6
+    },
+    "drop": {
+     "median_pct": 76.9,
+     "in_tracks": 7
+    },
+    "outro": {
+     "median_pct": 5.8,
+     "in_tracks": 8
+    },
+    "break": {
+     "median_pct": 8.6,
+     "in_tracks": 6
+    },
+    "intro": {
+     "median_pct": 6.1,
+     "in_tracks": 1
+    },
+    "verse": {
+     "median_pct": 78.8,
+     "in_tracks": 1
+    }
+   },
+   "tracks_starting_hot": 0,
+   "chord_cycles_bars": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    8,
+    16
+   ],
+   "layers_entering_at_drops": {
+    "+air": 7,
+    "+sub": 5,
+    "+bass": 4,
+    "+lowmid": 4,
+    "+mid": 4,
+    "+highmid": 3
+   },
+   "loop_ready_tracks": 0,
+   "roles": {
+    "chase / last-man-standing (fast, driving)": 7,
+    "tension / mid-intensity round music": 1
+   },
+   "hits_per_min": [
+    0.0,
+    8.0
+   ]
+  },
+  "tempo_clusters": [
+   {
+    "bpm": 175.0,
+    "members": 5,
+    "range": [
+     164.0,
+     180.0
+    ]
+   },
+   {
+    "bpm": 196.5,
+    "members": 2,
+    "range": [
+     193.0,
+     200.0
+    ]
+   },
+   {
+    "bpm": 120.0,
+    "members": 1,
+    "range": [
+     120.0,
+     120.0
+    ]
+   }
+  ],
+  "key_votes": {
+   "A minor": 4,
+   "B minor": 3,
+   "F# minor": 1
+  },
+  "note": "every number is the MEDIAN of the members; ranges give [min, median, max]. Lists inside deep (drops, sections) come from the member closest to the median."
+ }
+}

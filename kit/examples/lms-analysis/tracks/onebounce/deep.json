@@ -1,0 +1,797 @@
+{
+ "schema": "audio-forge/deep@1",
+ "rev": 2,
+ "file": "onebounce.mp3",
+ "seconds": 77.18,
+ "grid": {
+  "bpm": 96.5,
+  "beats_per_bar": 4,
+  "bar_s": 2.487,
+  "first_downbeat_s": 0.945,
+  "bars": 31,
+  "steady": true,
+  "downbeat_phase_confidence": 0.32,
+  "note": "bar 1 = first detected downbeat; with low phase confidence the bar COUNT is right but 'beat 1' may really be beat 2-4"
+ },
+ "tempo_feel": {
+  "analyzer_bpm": 96.5,
+  "feel_bpm": 193.0,
+  "attacks_per_beat_at_feel": 2.19,
+  "confidence": "high",
+  "other": [
+   96.5
+  ],
+  "note": "attacks-per-beat heuristic (about 2 per beat feels 'normal'); half/double time is a human call: ask which tempo they tap"
+ },
+ "tempo_map": {
+  "windows": [
+   {
+    "t": 0.0,
+    "bpm": 96.51,
+    "conf": 0.58
+   },
+   {
+    "t": 6.0,
+    "bpm": 96.44,
+    "conf": 0.66
+   },
+   {
+    "t": 12.0,
+    "bpm": 96.43,
+    "conf": 0.63
+   },
+   {
+    "t": 18.0,
+    "bpm": 96.45,
+    "conf": 0.57
+   },
+   {
+    "t": 24.0,
+    "bpm": 96.43,
+    "conf": 0.58
+   },
+   {
+    "t": 30.0,
+    "bpm": 96.47,
+    "conf": 0.57
+   },
+   {
+    "t": 35.9,
+    "bpm": 96.41,
+    "conf": 0.64
+   },
+   {
+    "t": 41.9,
+    "bpm": 96.45,
+    "conf": 0.7
+   },
+   {
+    "t": 47.9,
+    "bpm": 96.44,
+    "conf": 0.72
+   },
+   {
+    "t": 53.9,
+    "bpm": 96.45,
+    "conf": 0.69
+   },
+   {
+    "t": 59.9,
+    "bpm": 96.44,
+    "conf": 0.69
+   }
+  ],
+  "changes_at_s": [],
+  "max_drift_pct": 0.1
+ },
+ "hard_points": {
+  "hits": [],
+  "stops": [],
+  "risers": [],
+  "drops": [
+   {
+    "t": 8.406,
+    "bar": 4,
+    "pct": 10.9,
+    "score": 5.3,
+    "jump_db": 3.2,
+    "bass_jump_db": 4.2,
+    "brightness_hz": -131,
+    "has_cut": false,
+    "has_riser": false,
+    "impact": null,
+    "impact_offset_ms": null,
+    "anatomy": "bass +4.2 dB, brightness -131 Hz"
+   }
+  ],
+  "breakdowns": [],
+  "builds": [],
+  "tail": {
+   "t_cut": 75.85,
+   "tail_s": 1.34,
+   "bar": 31,
+   "beat": 1.47,
+   "bar_index": 30,
+   "fall_db_in_1s": 45.0,
+   "pct": 98.3,
+   "kind": "hard cut then decay"
+  },
+  "starts_hot": false,
+  "hits_per_min": 0.0,
+  "stops_per_min": 0.0,
+  "hits_on_16th_grid_share": null,
+  "hits_on_beat1_share": null,
+  "hit_types": {
+   "full impact": 0,
+   "sub/kick impact": 0,
+   "crash/high burst": 0,
+   "accent": 0
+  }
+ },
+ "sections": [
+  {
+   "label": "build",
+   "form": "A",
+   "start_bar": 1,
+   "bars": 3,
+   "t0": 0.945,
+   "t1": 8.41,
+   "pct": 9.7,
+   "energy_rel_db": -5.1,
+   "bands_db": {
+    "sub": -22.9,
+    "bass": -22.0,
+    "lowmid": -24.3,
+    "mid": -21.8,
+    "highmid": -24.2,
+    "air": -30.9
+   },
+   "onsets_per_beat": 2.5,
+   "side_mid_db": -15.0,
+   "centroid_hz": 3549,
+   "key": "B minor",
+   "key_margin": 0.03
+  },
+  {
+   "label": "drop",
+   "form": "B",
+   "start_bar": 4,
+   "bars": 27,
+   "t0": 8.406,
+   "t1": 75.56,
+   "pct": 87.1,
+   "energy_rel_db": -0.9,
+   "bands_db": {
+    "sub": -21.3,
+    "bass": -15.0,
+    "lowmid": -22.2,
+    "mid": -18.1,
+    "highmid": -21.5,
+    "air": -27.2
+   },
+   "onsets_per_beat": 4.72,
+   "side_mid_db": -12.7,
+   "centroid_hz": 3424,
+   "key": "B minor",
+   "key_margin": 0.0
+  },
+  {
+   "label": "outro",
+   "form": "A'",
+   "start_bar": 31,
+   "bars": 1,
+   "t0": 75.557,
+   "t1": 78.04,
+   "pct": 3.2,
+   "energy_rel_db": -7.5,
+   "bands_db": {
+    "sub": -32.2,
+    "bass": -23.3,
+    "lowmid": -26.2,
+    "mid": -22.2,
+    "highmid": -28.7,
+    "air": -40.6
+   },
+   "onsets_per_beat": 0.0,
+   "side_mid_db": -11.2,
+   "centroid_hz": 2770,
+   "key": "B minor",
+   "key_margin": 0.0
+  }
+ ],
+ "form": "A B A'",
+ "layer_moves": [
+  {
+   "bar": 4,
+   "section": "drop",
+   "moves": [
+    "+bass 5dB"
+   ]
+  },
+  {
+   "bar": 31,
+   "section": "outro",
+   "moves": [
+    "-sub 8dB",
+    "-bass 6dB",
+    "-lowmid 4dB",
+    "-mid 4dB",
+    "-highmid 7dB",
+    "-air 12dB"
+   ]
+  }
+ ],
+ "key_modulations": [],
+ "phrase": {
+  "chord_loop_bars": 4,
+  "similarity_by_period": {
+   "1": -0.25,
+   "2": 0.198,
+   "3": -0.283,
+   "4": 0.682,
+   "5": -0.344,
+   "6": 0.078,
+   "7": -0.33,
+   "8": 0.586,
+   "9": -0.373,
+   "10": 0.019,
+   "11": -0.469,
+   "12": 0.417,
+   "13": -0.421,
+   "14": -0.019,
+   "15": -0.361,
+   "16": 0.658
+  },
+  "note": "None = no repeating chord cycle found (long sections, slowly changing harmony)"
+ },
+ "loop": {
+  "loop_ready": false,
+  "issues": [
+   "ends with 1.3 s of fade/silence: a looping Sound would play that gap every cycle",
+   "level jump at the seam: last 0.25 s -63 dB vs first 0.25 s -15 dB",
+   "length is 30.65 bars from the first downbeat (-861 ms from a whole bar): a loop would drift off the grid"
+  ],
+  "fade_out_s": 1.31,
+  "lead_in_s": 0.05,
+  "head_db": -14.6,
+  "tail_db": -62.7,
+  "bars_from_first_downbeat": 30.65,
+  "note": "a rip of a finished track is rarely loop-ready; your own render should pass this before you upload it"
+ },
+ "lead_layer": {
+  "share_of_bars": 0.1,
+  "segments": [
+   {
+    "bar": 30,
+    "end_bar": 31,
+    "t": 73.07,
+    "end": 78.04
+   }
+  ],
+  "per_bar_share": [
+   0.244,
+   0.218,
+   0.272,
+   0.204,
+   0.203,
+   0.206,
+   0.215,
+   0.194,
+   0.187,
+   0.175,
+   0.186,
+   0.163,
+   0.183,
+   0.185,
+   0.194,
+   0.187,
+   0.189,
+   0.203,
+   0.191,
+   0.201,
+   0.182,
+   0.194,
+   0.185,
+   0.181,
+   0.175,
+   0.186,
+   0.164,
+   0.208,
+   0.236,
+   0.276,
+   0.757
+  ],
+  "relative": true,
+  "note": "a pitched mid-range layer (vocal, lead synth or guitar) is prominent here, relative to the rest of THIS track. It cannot tell which. For lyrics/vocals use `af.py lyrics` (Whisper, optional) or `af.py separate` (Demucs, optional)"
+ },
+ "bars": [
+  {
+   "bar": 1,
+   "t": 0.945,
+   "total_db": -15.729206419742845,
+   "sub": -22.8,
+   "bass": -22.1,
+   "lowmid": -24.1,
+   "mid": -21.9,
+   "highmid": -24.5,
+   "air": -31.0,
+   "centroid_hz": 3540,
+   "side_mid_db": -15.1,
+   "onsets_per_beat": 2.25,
+   "energy_rel_db": -5.1
+  },
+  {
+   "bar": 2,
+   "t": 3.432,
+   "total_db": -15.674004548820763,
+   "sub": -23.2,
+   "bass": -21.6,
+   "lowmid": -24.7,
+   "mid": -22.0,
+   "highmid": -23.8,
+   "air": -30.7,
+   "centroid_hz": 3559,
+   "side_mid_db": -15.1,
+   "onsets_per_beat": 2.5,
+   "energy_rel_db": -5.1
+  },
+  {
+   "bar": 3,
+   "t": 5.919,
+   "total_db": -15.63078562920466,
+   "sub": -22.8,
+   "bass": -22.2,
+   "lowmid": -24.0,
+   "mid": -21.6,
+   "highmid": -24.3,
+   "air": -30.9,
+   "centroid_hz": 3549,
+   "side_mid_db": -14.9,
+   "onsets_per_beat": 2.75,
+   "energy_rel_db": -5.0
+  },
+  {
+   "bar": 4,
+   "t": 8.406,
+   "total_db": -13.689530524410337,
+   "sub": -21.8,
+   "bass": -18.4,
+   "lowmid": -23.7,
+   "mid": -20.1,
+   "highmid": -22.8,
+   "air": -28.3,
+   "centroid_hz": 3532,
+   "side_mid_db": -14.1,
+   "onsets_per_beat": 3.25,
+   "energy_rel_db": -3.1
+  },
+  {
+   "bar": 5,
+   "t": 10.893,
+   "total_db": -11.54409330893473,
+   "sub": -20.1,
+   "bass": -15.2,
+   "lowmid": -22.1,
+   "mid": -18.2,
+   "highmid": -22.2,
+   "air": -28.0,
+   "centroid_hz": 3314,
+   "side_mid_db": -15.4,
+   "onsets_per_beat": 3.75,
+   "energy_rel_db": -0.9
+  },
+  {
+   "bar": 6,
+   "t": 13.381,
+   "total_db": -11.628724154521894,
+   "sub": -20.8,
+   "bass": -15.2,
+   "lowmid": -22.3,
+   "mid": -18.2,
+   "highmid": -21.9,
+   "air": -28.0,
+   "centroid_hz": 3358,
+   "side_mid_db": -14.4,
+   "onsets_per_beat": 3.75,
+   "energy_rel_db": -1.0
+  },
+  {
+   "bar": 7,
+   "t": 15.868,
+   "total_db": -11.465930385172294,
+   "sub": -20.0,
+   "bass": -15.2,
+   "lowmid": -22.0,
+   "mid": -18.0,
+   "highmid": -22.2,
+   "air": -27.9,
+   "centroid_hz": 3323,
+   "side_mid_db": -15.6,
+   "onsets_per_beat": 3.75,
+   "energy_rel_db": -0.9
+  },
+  {
+   "bar": 8,
+   "t": 18.355,
+   "total_db": -12.63225028044781,
+   "sub": -22.2,
+   "bass": -16.1,
+   "lowmid": -22.8,
+   "mid": -19.3,
+   "highmid": -23.0,
+   "air": -28.1,
+   "centroid_hz": 3369,
+   "side_mid_db": -12.8,
+   "onsets_per_beat": 4.0,
+   "energy_rel_db": -2.0
+  },
+  {
+   "bar": 9,
+   "t": 20.842,
+   "total_db": -10.949173962759172,
+   "sub": -20.6,
+   "bass": -14.1,
+   "lowmid": -21.8,
+   "mid": -17.9,
+   "highmid": -21.7,
+   "air": -27.3,
+   "centroid_hz": 3341,
+   "side_mid_db": -13.1,
+   "onsets_per_beat": 4.5,
+   "energy_rel_db": -0.4
+  },
+  {
+   "bar": 10,
+   "t": 23.329,
+   "total_db": -11.072272299703439,
+   "sub": -20.3,
+   "bass": -14.3,
+   "lowmid": -22.2,
+   "mid": -18.1,
+   "highmid": -21.3,
+   "air": -27.1,
+   "centroid_hz": 3409,
+   "side_mid_db": -12.9,
+   "onsets_per_beat": 4.5,
+   "energy_rel_db": -0.5
+  },
+  {
+   "bar": 11,
+   "t": 25.816,
+   "total_db": -10.894907095635801,
+   "sub": -20.5,
+   "bass": -14.0,
+   "lowmid": -21.9,
+   "mid": -17.9,
+   "highmid": -21.6,
+   "air": -27.4,
+   "centroid_hz": 3352,
+   "side_mid_db": -13.3,
+   "onsets_per_beat": 4.5,
+   "energy_rel_db": -0.3
+  },
+  {
+   "bar": 12,
+   "t": 28.303,
+   "total_db": -10.88149202716508,
+   "sub": -20.3,
+   "bass": -13.9,
+   "lowmid": -22.4,
+   "mid": -18.1,
+   "highmid": -21.2,
+   "air": -26.7,
+   "centroid_hz": 3459,
+   "side_mid_db": -12.3,
+   "onsets_per_beat": 4.75,
+   "energy_rel_db": -0.3
+  },
+  {
+   "bar": 13,
+   "t": 30.79,
+   "total_db": -10.82529989066003,
+   "sub": -20.5,
+   "bass": -13.9,
+   "lowmid": -21.9,
+   "mid": -17.8,
+   "highmid": -21.6,
+   "air": -27.3,
+   "centroid_hz": 3326,
+   "side_mid_db": -13.7,
+   "onsets_per_beat": 4.5,
+   "energy_rel_db": -0.2
+  },
+  {
+   "bar": 14,
+   "t": 33.277,
+   "total_db": -11.152726130546775,
+   "sub": -20.2,
+   "bass": -14.6,
+   "lowmid": -22.2,
+   "mid": -17.8,
+   "highmid": -21.2,
+   "air": -27.0,
+   "centroid_hz": 3415,
+   "side_mid_db": -12.7,
+   "onsets_per_beat": 4.5,
+   "energy_rel_db": -0.6
+  },
+  {
+   "bar": 15,
+   "t": 35.764,
+   "total_db": -10.911541993849017,
+   "sub": -20.5,
+   "bass": -14.1,
+   "lowmid": -21.9,
+   "mid": -17.7,
+   "highmid": -21.6,
+   "air": -27.2,
+   "centroid_hz": 3354,
+   "side_mid_db": -13.1,
+   "onsets_per_beat": 4.0,
+   "energy_rel_db": -0.3
+  },
+  {
+   "bar": 16,
+   "t": 38.251,
+   "total_db": -11.352143972141892,
+   "sub": -20.6,
+   "bass": -14.7,
+   "lowmid": -22.7,
+   "mid": -18.1,
+   "highmid": -21.4,
+   "air": -27.3,
+   "centroid_hz": 3395,
+   "side_mid_db": -12.3,
+   "onsets_per_beat": 4.25,
+   "energy_rel_db": -0.8
+  },
+  {
+   "bar": 17,
+   "t": 40.738,
+   "total_db": -11.969073190896264,
+   "sub": -21.6,
+   "bass": -15.5,
+   "lowmid": -23.3,
+   "mid": -18.5,
+   "highmid": -21.6,
+   "air": -27.3,
+   "centroid_hz": 3391,
+   "side_mid_db": -12.1,
+   "onsets_per_beat": 5.25,
+   "energy_rel_db": -1.4
+  },
+  {
+   "bar": 18,
+   "t": 43.225,
+   "total_db": -11.8167071960854,
+   "sub": -21.3,
+   "bass": -15.5,
+   "lowmid": -22.8,
+   "mid": -18.4,
+   "highmid": -21.5,
+   "air": -27.3,
+   "centroid_hz": 3423,
+   "side_mid_db": -12.3,
+   "onsets_per_beat": 5.75,
+   "energy_rel_db": -1.2
+  },
+  {
+   "bar": 19,
+   "t": 45.712,
+   "total_db": -11.74195744815391,
+   "sub": -21.6,
+   "bass": -15.1,
+   "lowmid": -23.3,
+   "mid": -18.4,
+   "highmid": -21.2,
+   "air": -27.3,
+   "centroid_hz": 3440,
+   "side_mid_db": -12.4,
+   "onsets_per_beat": 5.5,
+   "energy_rel_db": -1.1
+  },
+  {
+   "bar": 20,
+   "t": 48.199,
+   "total_db": -11.619100167810046,
+   "sub": -20.9,
+   "bass": -15.1,
+   "lowmid": -23.5,
+   "mid": -18.3,
+   "highmid": -21.2,
+   "air": -26.8,
+   "centroid_hz": 3520,
+   "side_mid_db": -12.0,
+   "onsets_per_beat": 6.0,
+   "energy_rel_db": -1.0
+  },
+  {
+   "bar": 21,
+   "t": 50.686,
+   "total_db": -11.637951421601677,
+   "sub": -21.8,
+   "bass": -15.0,
+   "lowmid": -22.5,
+   "mid": -18.4,
+   "highmid": -21.4,
+   "air": -26.9,
+   "centroid_hz": 3436,
+   "side_mid_db": -12.4,
+   "onsets_per_beat": 5.75,
+   "energy_rel_db": -1.0
+  },
+  {
+   "bar": 22,
+   "t": 53.173,
+   "total_db": -11.499923707153535,
+   "sub": -21.3,
+   "bass": -14.9,
+   "lowmid": -22.9,
+   "mid": -18.1,
+   "highmid": -21.2,
+   "air": -26.7,
+   "centroid_hz": 3483,
+   "side_mid_db": -12.7,
+   "onsets_per_beat": 6.0,
+   "energy_rel_db": -0.9
+  },
+  {
+   "bar": 23,
+   "t": 55.66,
+   "total_db": -11.596233647172182,
+   "sub": -21.5,
+   "bass": -15.1,
+   "lowmid": -22.9,
+   "mid": -18.2,
+   "highmid": -21.1,
+   "air": -26.7,
+   "centroid_hz": 3515,
+   "side_mid_db": -12.3,
+   "onsets_per_beat": 6.0,
+   "energy_rel_db": -1.0
+  },
+  {
+   "bar": 24,
+   "t": 58.147,
+   "total_db": -10.8141010124235,
+   "sub": -21.0,
+   "bass": -14.0,
+   "lowmid": -21.6,
+   "mid": -17.8,
+   "highmid": -20.9,
+   "air": -25.6,
+   "centroid_hz": 3642,
+   "side_mid_db": -12.3,
+   "onsets_per_beat": 6.5,
+   "energy_rel_db": -0.2
+  },
+  {
+   "bar": 25,
+   "t": 60.634,
+   "total_db": -10.598225829572305,
+   "sub": -21.8,
+   "bass": -13.9,
+   "lowmid": -20.3,
+   "mid": -17.3,
+   "highmid": -20.7,
+   "air": -26.0,
+   "centroid_hz": 3438,
+   "side_mid_db": -12.4,
+   "onsets_per_beat": 6.25,
+   "energy_rel_db": 0.0
+  },
+  {
+   "bar": 26,
+   "t": 63.121,
+   "total_db": -10.612029287780008,
+   "sub": -21.5,
+   "bass": -14.0,
+   "lowmid": -20.2,
+   "mid": -17.3,
+   "highmid": -20.7,
+   "air": -25.9,
+   "centroid_hz": 3475,
+   "side_mid_db": -12.2,
+   "onsets_per_beat": 6.0,
+   "energy_rel_db": -0.0
+  },
+  {
+   "bar": 27,
+   "t": 65.609,
+   "total_db": -10.673918150686335,
+   "sub": -21.8,
+   "bass": -13.8,
+   "lowmid": -21.1,
+   "mid": -17.4,
+   "highmid": -20.6,
+   "air": -26.0,
+   "centroid_hz": 3493,
+   "side_mid_db": -12.3,
+   "onsets_per_beat": 6.0,
+   "energy_rel_db": -0.1
+  },
+  {
+   "bar": 28,
+   "t": 68.096,
+   "total_db": -11.099486595280919,
+   "sub": -21.7,
+   "bass": -14.9,
+   "lowmid": -21.0,
+   "mid": -17.1,
+   "highmid": -20.8,
+   "air": -26.4,
+   "centroid_hz": 3485,
+   "side_mid_db": -11.6,
+   "onsets_per_beat": 4.75,
+   "energy_rel_db": -0.5
+  },
+  {
+   "bar": 29,
+   "t": 70.583,
+   "total_db": -12.332952241297095,
+   "sub": -23.5,
+   "bass": -17.1,
+   "lowmid": -21.6,
+   "mid": -17.6,
+   "highmid": -21.5,
+   "air": -27.5,
+   "centroid_hz": 3473,
+   "side_mid_db": -10.1,
+   "onsets_per_beat": 2.25,
+   "energy_rel_db": -1.7
+  },
+  {
+   "bar": 30,
+   "t": 73.07,
+   "total_db": -13.08365685965076,
+   "sub": -25.2,
+   "bass": -17.5,
+   "lowmid": -22.3,
+   "mid": -18.1,
+   "highmid": -22.7,
+   "air": -29.7,
+   "centroid_hz": 3293,
+   "side_mid_db": -10.3,
+   "onsets_per_beat": 1.5,
+   "energy_rel_db": -2.5
+  },
+  {
+   "bar": 31,
+   "t": 75.557,
+   "total_db": -18.14819174955155,
+   "sub": -32.2,
+   "bass": -23.3,
+   "lowmid": -26.2,
+   "mid": -22.2,
+   "highmid": -28.7,
+   "air": -40.6,
+   "centroid_hz": 2770,
+   "side_mid_db": -11.2,
+   "onsets_per_beat": 0.0,
+   "energy_rel_db": -7.5
+  }
+ ],
+ "role_guess": {
+  "role": "chase / last-man-standing (fast, driving)",
+  "reasons": [
+   "feel 193 BPM with 2.2 attacks per beat",
+   "minor mode",
+   "loud master (-7.6 LUFS)"
+  ],
+  "heuristic": true
+ },
+ "loudness": {
+  "lufs": -7.6,
+  "lra": 4.5,
+  "true_peak_db": 0.8
+ },
+ "key": {
+  "key": "B",
+  "mode": "minor",
+  "score": 0.633
+ },
+ "analyzer_profile": {
+  "tempo": 96.5,
+  "librosa_tempo": null
+ }
+}

@@ -1,0 +1,7 @@
+kind,time_s,end_s,bar,beat,pct,strength_db,detail
+hit,38.674,,29,4.01,48.1,8.3,sub/kick impact
+hit,45.675,,35,1.01,56.9,11.7,full impact
+hit,53.012,,40,3.02,66.0,8.4,full impact
+riser,9.567,11.076,7,4.7,11.9,13.1,
+drop,5.667,,5,1,7.1,2.3,"bass +5.1 dB, brightness -296 Hz"
+drop,41.671,,32,1,51.9,2.8,"bass +2.5 dB, brightness +150 Hz"

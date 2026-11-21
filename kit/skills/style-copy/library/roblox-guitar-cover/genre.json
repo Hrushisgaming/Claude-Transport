@@ -1,0 +1,143 @@
+{
+ "name": "roblox_guitar_cover",
+ "base": "metal",
+ "override": {
+  "bpm": [
+   161,
+   169
+  ],
+  "scales": [
+   "minor"
+  ],
+  "swing": 0.007,
+  "guitar": {
+   "inst": "guitar_elec",
+   "oct": 2,
+   "rhythm": "x.x.x.x.x.x.x.x.",
+   "kind": "triad",
+   "kw": {
+    "drive": 8.0,
+    "mute": 0.0,
+    "bright": 1.0
+   }
+  },
+  "plan": [
+   [
+    "intro",
+    0.06
+   ],
+   [
+    "drop",
+    0.8
+   ],
+   [
+    "break_",
+    0.075
+   ],
+   [
+    "drop",
+    0.065
+   ]
+  ],
+  "chord_len": 1,
+  "lead": {
+   "inst": "guitar_elec",
+   "oct": 4,
+   "density": 0.5,
+   "contour": "arch",
+   "leap": 0.3,
+   "kw": {
+    "drive": 6.0,
+    "mute": 0.0,
+    "bright": 1.0
+   }
+  },
+  "bass": {
+   "inst": "saw_bass",
+   "oct": 2,
+   "rhythm": "x.x.x.x.x.x.x.x.",
+   "kw": {
+    "cutoff": 600,
+    "drive": 1.5
+   }
+  },
+  "drums": {
+   "kick": "x.......x.......",
+   "snare": "....X.......X...",
+   "hat": "x...x...x...x...",
+   "ohat": "",
+   "tom": ""
+  },
+  "mix": {
+   "guitar": {
+    "gain_db": -4,
+    "widen": 0.012
+   },
+   "lead": {
+    "reverb": 0.15,
+    "delay": 0.12,
+    "gain_db": -4
+   },
+   "bass": {
+    "gain_db": -7
+   },
+   "kick": {
+    "gain_db": -9
+   },
+   "snare": {
+    "gain_db": -4
+   },
+   "hat": {
+    "gain_db": -14
+   }
+  },
+  "layers": {
+   "intro": [
+    "guitar",
+    "hat"
+   ],
+   "build": [
+    "guitar",
+    "kick",
+    "snare_roll",
+    "bass",
+    "hat"
+   ],
+   "drop": [
+    "kick",
+    "snare",
+    "hat",
+    "bass",
+    "guitar",
+    "lead"
+   ],
+   "verse": [
+    "kick",
+    "snare",
+    "hat",
+    "bass",
+    "guitar"
+   ],
+   "break_": [
+    "guitar",
+    "lead"
+   ],
+   "outro": [
+    "guitar",
+    "kick"
+   ]
+  },
+  "impact": false,
+  "fills": true,
+  "lufs": -14.5,
+  "dynamics": 0.85
+ },
+ "note": "Shipped style derived from MEASUREMENTS of a Roblox-edit guitar cover (tempo, key, rhythmic density, arrangement shape, brightness, stereo, loudness). No notes, riffs or audio from the reference are used. Tune with `af.py compare`.",
+ "aliases": [
+  "roblox-guitar-cover",
+  "roblox_edit",
+  "roblox-edit",
+  "guitar_cover",
+  "guitar-cover"
+ ]
+}

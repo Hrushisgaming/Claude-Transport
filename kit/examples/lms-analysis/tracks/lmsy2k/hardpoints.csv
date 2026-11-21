@@ -1,0 +1,5 @@
+kind,time_s,end_s,bar,beat,pct,strength_db,detail
+hit,4.901,,3,1.0,6.2,10.0,full impact
+breakdown,67.3,74.5,29,1,85.7,5.2,"3 bars, leads_into_drop=False"
+end_cut,75.81,,32,3.19,96.5,4.1,"fade-out, tail 2.71 s"
+drop,4.899,,3,1,6.2,16.9,"full impact (+10.0 dB, level stays up) -> bass +29.8 dB, brightness -1544 Hz"

@@ -1,0 +1,178 @@
+{
+ "source": "/path/to/gameplay.mp4",
+ "music": null,
+ "format": "9:16",
+ "fps": 30,
+ "start": 0,
+ "dur": 20.0,
+ "reframe": {
+  "mode": "cover",
+  "x": 0.5,
+  "bg": "blur"
+ },
+ "look": {
+  "grain": 0.05,
+  "vignette": 0.45,
+  "letterbox": 0.0,
+  "bloom": 0.25
+ },
+ "acts": [
+  {
+   "name": "calm",
+   "t": 0.0,
+   "look": "cold",
+   "drone": 0.1,
+   "heart_bpm": 55
+  },
+  {
+   "name": "the hunt",
+   "t": 2.8,
+   "look": "teal",
+   "drone": 0.3,
+   "heart_bpm": 70
+  },
+  {
+   "name": "escalation",
+   "t": 8.4,
+   "look": "teal",
+   "drone": 0.55,
+   "heart_bpm": 90
+  },
+  {
+   "name": "finale",
+   "t": 14.4,
+   "look": "bleach",
+   "drone": 0.85,
+   "heart_bpm": 115
+  },
+  {
+   "name": "payoff",
+   "t": 18.4,
+   "look": "warm",
+   "drone": 0.25,
+   "heart_bpm": 60
+  }
+ ],
+ "events": [
+  {
+   "t": 3.971,
+   "strength": 0.884,
+   "fx": [
+    "punch",
+    "shake"
+   ],
+   "sfx": "boom",
+   "riser": 0.0
+  },
+  {
+   "t": 7.4,
+   "strength": 0.795,
+   "fx": [
+    "punch",
+    "shake"
+   ],
+   "sfx": "boom",
+   "riser": 0.0
+  },
+  {
+   "t": 8.975,
+   "strength": 0.942,
+   "fx": [
+    "punch",
+    "shake"
+   ],
+   "sfx": "boom",
+   "riser": 0.0
+  },
+  {
+   "t": 10.53,
+   "strength": 0.76,
+   "fx": [
+    "punch",
+    "shake"
+   ],
+   "sfx": "boom",
+   "riser": 0.0
+  },
+  {
+   "t": 11.993,
+   "strength": 0.742,
+   "fx": [
+    "punch",
+    "shake"
+   ],
+   "sfx": "boom",
+   "riser": 0.0
+  },
+  {
+   "t": 13.897,
+   "strength": 0.759,
+   "fx": [
+    "punch",
+    "shake"
+   ],
+   "sfx": "boom",
+   "riser": 0.0
+  },
+  {
+   "t": 16.567,
+   "strength": 0.774,
+   "fx": [
+    "punch",
+    "shake"
+   ],
+   "sfx": "boom",
+   "riser": 0.0
+  },
+  {
+   "t": 18.971,
+   "strength": 1.0,
+   "fx": [
+    "punch",
+    "shake",
+    "flash",
+    "chroma"
+   ],
+   "sfx": "impact",
+   "riser": 1.2,
+   "ramp": {
+    "speed": 0.3,
+    "dur": 1.0
+   }
+  }
+ ],
+ "overlays": [
+  {
+   "type": "title",
+   "t": 0.5,
+   "dur": 2.5,
+   "text": "THE HUNT BEGINS"
+  },
+  {
+   "type": "counter",
+   "t": 9.0,
+   "dur": 2.0,
+   "text": "5 LEFT"
+  },
+  {
+   "type": "lower_third",
+   "t": 13.9,
+   "dur": 2.5,
+   "text": "LAST SURVIVOR"
+  }
+ ],
+ "visualizer": {
+  "style": "bars",
+  "pos": "bottom",
+  "color": "#ffffff",
+  "opacity": 0.8
+ },
+ "audio": {
+  "game_db": -4,
+  "music_db": -13,
+  "duck_db": -7,
+  "sfx_db": -3,
+  "lufs": -14,
+  "music_beat_sync": false
+ }
+}

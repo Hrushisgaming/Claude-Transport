@@ -44,8 +44,8 @@ try:
     bm = json.load(open(sc["beatmap"])); check("score: beatmap drop matches", any(abs(d - 14.0) < 0.06 for d in bm["drops"]), f"{bm['drops']}")
 except Exception as e:
     check("score", False, str(e) + r.stderr[-200:])
-r = subprocess.run([sys.executable, os.path.join(HERE, "hear.py"), os.path.join(tmp, "bed.wav"), "--dry-run"], capture_output=True, text=True)
-check("hear: clip prepared (dry run, nothing sent)", r.returncode == 0 and "nothing sent" in r.stdout, r.stdout.strip()[:80] + r.stderr[-120:])
+r = subprocess.run([sys.executable, os.path.join(HERE, "hear.py"), os.path.join(tmp, "bed.wav"), "--step", "4"], capture_output=True, text=True)
+check("hear: audio X-ray report (tempo, key, timeline)", r.returncode == 0 and "AUDIO X-RAY REPORT" in r.stdout and "**Tempo**" in r.stdout and "Timeline" in r.stdout, r.stdout.strip()[:60] + r.stderr[-120:])
 r = subprocess.run([sys.executable, os.path.join(HERE, "study.py"), os.path.join(tmp, "bed.wav"), "--name", "selftest", "--out", os.path.join(tmp, "st")], capture_output=True, text=True)
 r2 = subprocess.run([sys.executable, os.path.join(HERE, "compare.py"), os.path.join(tmp, "bed.wav"), os.path.join(tmp, "st", "dna.json")], capture_output=True, text=True)
 check("study + compare: a track compared with its own DNA is 100/100", r.returncode == 0 and "closeness 100/100" in r2.stdout, (r.stderr + r2.stdout)[-160:])
@@ -103,16 +103,13 @@ check("instruments: every voice renders finite audio above 0.2 peak", not bad, f
 for bk in ("amen", "dnb", "horror", "metal"):
     ev = DRM.breakbeat(4, bk, np.random.RandomState(1), 0.8)
     check(f"breakbeat {bk}: events generated", len(ev) > 10 and all(0 <= st < 64 for st, _, _ in ev), f"{len(ev)} events")
-r = subprocess.run([sys.executable, os.path.join(HERE, "hear.py"), p, "--local", "--out", os.path.join(tmp, "hear")], capture_output=True, text=True)
+r = subprocess.run([sys.executable, os.path.join(HERE, "hear.py"), p, "--json", "--step", "4"], capture_output=True, text=True)
 try:
-    hr = json.load(open(os.path.join(tmp, "hear", "hear-local.json")))
-    check("hear --local: offline telemetry with bands, mud, harshness, punch and stereo",
-          r.returncode == 0 and hr["schema"] == "audio-forge/hear-local@1" and "overall_bands_db" in hr and "sections" in hr
-          and hr["sections"] and "punch_crest_db" in hr["sections"][0] and "stereo" in hr["sections"][0]
-          and os.path.exists(os.path.join(tmp, "hear", "hear-local.md")),
-          f"{len(hr.get('sections', []))} sections, {len(hr.get('issues', []))} issues")
+    hr = json.loads(r.stdout)
+    hr = hr[0] if isinstance(hr, list) else hr
+    check("hear --json: machine-readable X-ray payload", r.returncode == 0 and isinstance(hr, dict) and len(hr) > 3, f"keys {list(hr)[:5]}")
 except Exception as e:
-    check("hear --local", False, str(e) + r.stderr[-200:])
+    check("hear --json", False, str(e) + r.stderr[-200:])
 r = subprocess.run([sys.executable, os.path.join(HERE, "audition.py"), "--out", os.path.join(tmp, "audition"),
                     "--inst", "piano_m1,organ_rock,bell_tubular", "--genre", "house", "--bpm", "120", "--bars", "4"], capture_output=True, text=True)
 check("audition: showcase + timestamp guide + mini-mix",

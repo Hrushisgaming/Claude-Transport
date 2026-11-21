@@ -69,7 +69,12 @@ def polyblep_square(freq: float, n_samples: int, sr: int = 44100, duty: float = 
 def biquad_filter(x: np.ndarray, ftype: str, cutoff: float, q: float = 0.707, sr: int = 44100) -> np.ndarray:
     nyq = 0.49 * sr
     fc = float(np.clip(cutoff, 20.0, nyq))
-    sos = signal.butter(2, fc / (0.5 * sr), btype=ftype, output="sos")
+    nyq = 0.5 * sr
+    if ftype in ("bandpass", "bandstop"):
+        wn = [max(fc / 1.5, 20.0) / nyq, min(fc * 1.5, nyq * 0.99) / nyq]   # single centre freq -> +/-half-octave band
+    else:
+        wn = fc / nyq
+    sos = signal.butter(2, wn, btype=ftype, output="sos")
     return signal.sosfilt(sos, x).astype(np.float32)
 
 
@@ -389,8 +394,8 @@ def synth_choir_pad(
     )
     vocal = np.zeros(n_samples, dtype=np.float32)
     for f_hz, q_val, gain_w in formants:
-        sos = signal.iirpeak(f_hz / (0.5 * sr), q_val)
-        vocal += gain_w * signal.sosfilt(sos, src).astype(np.float32)
+        b_pk, a_pk = signal.iirpeak(f_hz / (0.5 * sr), q_val)
+        vocal += gain_w * signal.lfilter(b_pk, a_pk, src).astype(np.float32)
 
     rng = np.random.default_rng(777)
     breath = biquad_filter(rng.normal(0.0, 0.08, n_samples).astype(np.float32), "bandpass", 1800.0, sr=sr)
@@ -425,9 +430,9 @@ def synth_double_laugh(
         f_contour = np.linspace(f_start, f_end, n_syl)
         glottal = polyblep_saw(f_contour, n_syl, sr=sr)
 
-        f1 = signal.sosfilt(signal.iirpeak(760.0 / (0.5 * sr), 5.5), glottal)
-        f2 = 0.8 * signal.sosfilt(signal.iirpeak(1240.0 / (0.5 * sr), 6.5), glottal)
-        f3 = 0.35 * signal.sosfilt(signal.iirpeak(2550.0 / (0.5 * sr), 8.0), glottal)
+        f1 = signal.lfilter(*signal.iirpeak(760.0 / (0.5 * sr), 5.5), glottal)
+        f2 = 0.8 * signal.lfilter(*signal.iirpeak(1240.0 / (0.5 * sr), 6.5), glottal)
+        f3 = 0.35 * signal.lfilter(*signal.iirpeak(2550.0 / (0.5 * sr), 8.0), glottal)
 
         h_breath = rng.normal(0.0, 1.0, n_syl).astype(np.float32) * np.exp(-ts * 38.0).astype(np.float32)
         h_breath = biquad_filter(h_breath, "bandpass", 1450.0, sr=sr)
@@ -560,3 +565,9 @@ def synthesize_note(
 ) -> np.ndarray:
     fn = INSTRUMENTS.get(instrument.lower(), INSTRUMENTS["lead"])
     return fn(freq, duration, velocity, sr, **kwargs)
+
+
+def render(instrument: str, midi: float, duration: float, velocity: float = 0.85, sr: int = 44100, **kwargs) -> np.ndarray:
+    """MIDI-note entry point used by song.py / audition.py: converts a MIDI number to Hz and synthesizes it."""
+    freq = 440.0 * 2.0 ** ((float(midi) - 69.0) / 12.0)
+    return synthesize_note(instrument, freq, duration, velocity, sr, **kwargs)

@@ -711,8 +711,7 @@ def format_report(data: dict) -> str:
         for d in s["silence_dropouts"]:
             lines.append(f"- `{d['start']} - {d['end']}` ({d['duration_ms']} ms)")
     else:
-        lines.append("### Sudden Silence Drop-Outs / Chokes:
-- None detected")
+        lines.append("### Sudden Silence Drop-Outs / Chokes:\n- None detected")
 
     if t.get("drum_grid_16"):
         lines.extend(["", "## 5. Extracted 16-Step Drum Groove (`x`=hit, `g`=ghost, `.`=rest)"])
@@ -738,8 +737,7 @@ def format_report(data: dict) -> str:
         json.dumps(data, indent=2),
         f"{fence}",
     ])
-    return "
-".join(lines)
+    return "\n".join(lines)
 
 
 def main() -> None:
@@ -756,11 +754,7 @@ def main() -> None:
         payload = results[0] if len(results) == 1 else {"tracks": results}
         output = json.dumps(payload, indent=2)
     else:
-        output = "
-
----
-
-".join(format_report(r) for r in results)
+        output = "\n\n---\n\n".join(format_report(r) for r in results)
 
     if args.out:
         Path(args.out).write_text(output, encoding="utf-8")

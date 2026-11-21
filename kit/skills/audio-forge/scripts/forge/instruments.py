@@ -1,573 +1,595 @@
-#!/usr/bin/env python3
+"""instruments.py -- synthesised melodic voices. note(inst, midi, dur_s, vel) -> array (mono or stereo, incl. release tail).
+Every instrument is built from oscillators/FM/filters/physical modelling; no samples.
+
+V2 (2026-11-19): Karplus-Strong guitars, 3 pianos, 3 organs, 4 bells, 303 acid,
+chip lead, pulsing/Y2K basses, formant sax, marimba, rave stab/shout, orchestral
+hit, heartbeat, siren, clock tick. All old INSTRUMENTS keys still exist.
 """
-instruments.py - Acoustic-Grade & LMS-Inspired Instrument Synthesis Engine.
-
-Eliminates the "electronic buzz" and excessive vibrato of naive waveform generators by using:
-  - PolyBLEP anti-aliased oscillators (zero harsh high-frequency aliasing)
-  - Karplus-Strong physical string modeling + oversampled tube amp & cabinet IR for electric guitars
-  - Multi-voice formant-filtered bowed string ensembles with independent slow drift (no beehive buzz)
-  - Stiff-string inharmonicity + hammer-felt noise transients for dark & crystalline ice pianos
-  - 5-rank stop additive synthesis with pipe "chiff" air transients for gothic pipe organs
-  - Risset inharmonic tubular/church/clock bell partials with clapper strike transients
-  - Formant-filtered choir pads & double-hit ("HA-HA") maniacal laugh generator
-  - Y2K / 2008 Roblox retro electronic instruments (FM slap/growl bass, acid lead, tracker arp)
-"""
-
-from __future__ import annotations
-
-import math
-from typing import Callable, Dict, List
-
 import numpy as np
-from scipy import signal
-
-
-def _polyblep(t: np.ndarray, dt: float) -> np.ndarray:
-    blep = np.zeros_like(t)
-    m1 = t < dt
-    if np.any(m1):
-        x = t[m1] / dt
-        blep[m1] = x + x - x * x - 1.0
-    m2 = t > (1.0 - dt)
-    if np.any(m2):
-        x = (t[m2] - 1.0) / dt
-        blep[m2] = x * x + x + x + 1.0
-    return blep
-
-
-def polyblep_saw(freq: float | np.ndarray, n_samples: int, sr: int = 44100, phase0: float = 0.0) -> np.ndarray:
-    if np.ndim(freq) == 0:
-        dt = float(freq) / sr
-        phase = (phase0 + np.arange(n_samples, dtype=np.float64) * dt) % 1.0
-        out = 2.0 * phase - 1.0 - _polyblep(phase, dt)
-        return out.astype(np.float32)
-    f_arr = np.asarray(freq, dtype=np.float64)
-    dt_arr = f_arr / sr
-    phase = (phase0 + np.cumsum(dt_arr)) % 1.0
-    out = 2.0 * phase - 1.0
-    for i in range(n_samples):
-        dt = dt_arr[i]
-        p = phase[i]
-        if p < dt:
-            x = p / dt
-            out[i] -= (2.0 * x - x * x - 1.0)
-        elif p > 1.0 - dt:
-            x = (p - 1.0) / dt
-            out[i] -= (x * x + 2.0 * x + 1.0)
-    return out.astype(np.float32)
-
-
-def polyblep_square(freq: float, n_samples: int, sr: int = 44100, duty: float = 0.5, phase0: float = 0.0) -> np.ndarray:
-    dt = float(freq) / sr
-    phase = (phase0 + np.arange(n_samples, dtype=np.float64) * dt) % 1.0
-    out = np.where(phase < duty, 1.0, -1.0)
-    out += _polyblep(phase, dt)
-    out -= _polyblep((phase - duty) % 1.0, dt)
-    return out.astype(np.float32)
-
-
-def biquad_filter(x: np.ndarray, ftype: str, cutoff: float, q: float = 0.707, sr: int = 44100) -> np.ndarray:
-    nyq = 0.49 * sr
-    fc = float(np.clip(cutoff, 20.0, nyq))
-    nyq = 0.5 * sr
-    if ftype in ("bandpass", "bandstop"):
-        wn = [max(fc / 1.5, 20.0) / nyq, min(fc * 1.5, nyq * 0.99) / nyq]   # single centre freq -> +/-half-octave band
-    else:
-        wn = fc / nyq
-    sos = signal.butter(2, wn, btype=ftype, output="sos")
-    return signal.sosfilt(sos, x).astype(np.float32)
-
-
-def peaking_eq(x: np.ndarray, freq: float, q: float, gain_db: float, sr: int = 44100) -> np.ndarray:
-    w0 = 2.0 * math.pi * float(np.clip(freq, 25.0, 0.48 * sr)) / sr
-    alpha = math.sin(w0) / (2.0 * max(q, 0.1))
-    A = 10.0 ** (gain_db / 40.0)
-    b0 = 1.0 + alpha * A
-    b1 = -2.0 * math.cos(w0)
-    b2 = 1.0 - alpha * A
-    a0 = 1.0 + alpha / A
-    a1 = -2.0 * math.cos(w0)
-    a2 = 1.0 - alpha / A
-    sos = np.array([[b0 / a0, b1 / a0, b2 / a0, 1.0, a1 / a0, a2 / a0]], dtype=np.float64)
-    return signal.sosfilt(sos, x).astype(np.float32)
-
-
-def adsr_env(n: int, sr: int, attack: float, decay: float, sustain: float, release: float) -> np.ndarray:
-    a = max(1, int(attack * sr))
-    d = max(1, int(decay * sr))
-    r = max(1, int(release * sr))
-    s_len = max(0, n - a - d - r)
-    env = np.concatenate([
-        np.linspace(0.0, 1.0, a, endpoint=False),
-        np.linspace(1.0, sustain, d, endpoint=False),
-        np.full(s_len, sustain),
-        np.linspace(sustain, 0.0, r, endpoint=True),
-    ])
-    if len(env) > n:
-        env = env[:n]
-    elif len(env) < n:
-        env = np.pad(env, (0, n - len(env)))
-    return env.astype(np.float32)
-
-
-def stereoize(mono: np.ndarray, width: float = 0.45, delay_ms: float = 11.0, sr: int = 44100) -> np.ndarray:
-    """Create natural stereo image without metallic comb-buzz."""
-    d_samp = max(1, int(delay_ms * 0.001 * sr))
-    delayed = np.pad(mono, (d_samp, 0))[: len(mono)]
-    delayed = biquad_filter(delayed, "lowpass", 6500.0, sr=sr)
-    left = mono + width * 0.5 * (mono - delayed)
-    right = mono - width * 0.5 * (mono - delayed)
-    return np.column_stack([left, right]).astype(np.float32)
-
-
-def synth_electric_guitar(
-    freq: float,
-    duration: float,
-    velocity: float = 0.85,
-    sr: int = 44100,
-    palm_mute: float = 0.0,
-    gain: float = 5.5,
-    power_chord: bool = True,
-) -> np.ndarray:
-    """
-    Karplus-Strong plucked string model + tube amp saturation + 4x12 guitar cabinet IR.
-    Eliminates the synthetic sawtooth buzz of naive rock synths.
-    """
-    n_samples = max(1, int(duration * sr))
-
-    def pluck_string(f0: float, mute_amt: float) -> np.ndarray:
-        period = max(4, int(round(sr / max(f0, 27.5))))
-        rng = np.random.default_rng(int(f0 * 100) % 99991)
-        exc = rng.uniform(-1.0, 1.0, period).astype(np.float64)
-        pick_pos = max(1, period // 6)
-        exc[pick_pos:] -= 0.75 * exc[:-pick_pos]
-        exc = biquad_filter(exc.astype(np.float32), "lowpass", 3400.0 - 1600.0 * mute_amt, sr=sr).astype(np.float64)
-
-        out = np.zeros(n_samples, dtype=np.float64)
-        out[: min(period, n_samples)] = exc[: min(period, n_samples)]
-
-        base_decay = 0.9965 - 0.022 * mute_amt
-        lp_coeff = 0.48 - 0.24 * mute_amt
-        prev = 0.0
-        for i in range(period, n_samples):
-            raw = out[i - period]
-            filtered = (1.0 - lp_coeff) * raw + lp_coeff * prev
-            prev = filtered
-            out[i] = base_decay * filtered
-        return out.astype(np.float32)
-
-    sig = pluck_string(freq, palm_mute)
-    if power_chord:
-        sig += 0.72 * pluck_string(freq * (2.0 ** (7.0 / 12.0)), palm_mute)
-        sig += 0.42 * pluck_string(freq * 2.0, palm_mute)
-
-    drive = sig * (gain * (0.75 + 0.45 * velocity))
-    amp = np.where(drive >= 0.0, np.tanh(drive * 1.15), np.tanh(drive * 0.85) * 0.92)
-
-    cab = biquad_filter(amp.astype(np.float32), "highpass", 75.0, sr=sr)
-    cab = peaking_eq(cab, freq=125.0, q=1.8, gain_db=4.5, sr=sr)
-    cab = peaking_eq(cab, freq=420.0, q=1.2, gain_db=-3.0, sr=sr)
-    cab = peaking_eq(cab, freq=2100.0, q=1.5, gain_db=4.0, sr=sr)
-    cab = biquad_filter(cab, "lowpass", 4300.0, sr=sr)
-    cab = biquad_filter(cab, "lowpass", 5200.0, sr=sr)
-
-    env = adsr_env(n_samples, sr, attack=0.004, decay=0.12, sustain=0.88, release=0.06)
-    return stereoize(cab * env * velocity * 0.55, width=0.55, delay_ms=14.0, sr=sr)
-
-
-def synth_strings(
-    freq: float,
-    duration: float,
-    velocity: float = 0.8,
-    sr: int = 44100,
-    tremolo: bool = False,
-) -> np.ndarray:
-    """8-voice bowed ensemble with wood-body formant filtering and gentle bow-hair rolloff."""
-    n_samples = max(1, int(duration * sr))
-    t = np.arange(n_samples, dtype=np.float64) / sr
-    detunes_cents = [-11.0, -6.5, -2.5, 0.0, 2.8, 6.2, 10.5, -4.0]
-    pans = [-0.8, -0.5, -0.2, 0.0, 0.2, 0.5, 0.8, -0.3]
-
-    left = np.zeros(n_samples, dtype=np.float32)
-    right = np.zeros(n_samples, dtype=np.float32)
-
-    for idx, (cents, pan) in enumerate(zip(detunes_cents, pans)):
-        drift = 1.8 * np.sin(2.0 * math.pi * (0.35 + 0.06 * idx) * t + idx)
-        f_inst = freq * (2.0 ** ((cents + drift) / 1200.0))
-        voice = polyblep_saw(f_inst, n_samples, sr=sr, phase0=(idx * 0.13) % 1.0)
-        if tremolo:
-            bow = 0.72 + 0.28 * np.sin(2.0 * math.pi * 9.5 * t + idx * 1.1)
-            voice = voice * bow.astype(np.float32)
-
-        l_gain = math.sqrt(0.5 * (1.0 - pan))
-        r_gain = math.sqrt(0.5 * (1.0 + pan))
-        left += voice * l_gain
-        right += voice * r_gain
-
-    left /= len(detunes_cents)
-    right /= len(detunes_cents)
-
-    for ch_idx, ch in enumerate([left, right]):
-        ch = biquad_filter(ch, "highpass", 110.0, sr=sr)
-        ch = peaking_eq(ch, freq=290.0, q=2.0, gain_db=3.5, sr=sr)
-        ch = peaking_eq(ch, freq=620.0, q=1.8, gain_db=2.2, sr=sr)
-        ch = peaking_eq(ch, freq=2400.0, q=1.6, gain_db=-2.5, sr=sr)
-        ch = biquad_filter(ch, "lowpass", 3900.0, sr=sr)
-        if ch_idx == 0:
-            left = ch
-        else:
-            right = ch
-
-    atk = 0.06 if tremolo else 0.16
-    env = adsr_env(n_samples, sr, attack=atk, decay=0.25, sustain=0.85, release=0.22)
-    out = np.column_stack([left * env, right * env]) * velocity * 0.65
-    return out.astype(np.float32)
-
-
-def synth_piano(
-    freq: float,
-    duration: float,
-    velocity: float = 0.85,
-    sr: int = 44100,
-    style: str = "dark",
-) -> np.ndarray:
-    """Stiff-string inharmonic piano & crystalline bell-piano model with hammer-felt transient."""
-    n_samples = max(1, int(duration * sr))
-    t = np.arange(n_samples, dtype=np.float64) / sr
-
-    if style == "harpsichord":
-        sig = polyblep_saw(freq, n_samples, sr=sr) * 0.55 + polyblep_square(freq * 2.0, n_samples, sr=sr, duty=0.25) * 0.35
-        decay_t = np.exp(-t * 3.8).astype(np.float32)
-        sig = biquad_filter(sig * decay_t, "highpass", 140.0, sr=sr)
-        sig = biquad_filter(sig, "lowpass", 5800.0, sr=sr)
-        env = adsr_env(n_samples, sr, attack=0.002, decay=0.22, sustain=0.18, release=0.08)
-        return stereoize(sig * env * velocity * 0.55, width=0.45, delay_ms=9.0, sr=sr)
-
-    B = 0.00028 if style == "dark" else 0.00065
-    n_partials = 8 if style == "dark" else 7
-    sig = np.zeros(n_samples, dtype=np.float64)
-
-    for n in range(1, n_partials + 1):
-        fn = n * freq * math.sqrt(1.0 + B * (n ** 2))
-        if fn >= 0.45 * sr:
-            break
-        rate = (1.35 + 0.55 * n) if style == "dark" else (0.95 + 0.38 * n)
-        amp_n = (1.0 / (n ** (1.35 if style == "dark" else 1.1))) * np.exp(-t * rate)
-        w1 = np.sin(2.0 * math.pi * fn * t)
-        w2 = np.sin(2.0 * math.pi * (fn * 1.00075) * t + 0.4)
-        sig += amp_n * (0.55 * w1 + 0.45 * w2)
-
-    rng = np.random.default_rng(int(freq * 37) % 65535)
-    hammer = rng.normal(0.0, 1.0, n_samples).astype(np.float32) * np.exp(-t * 140.0).astype(np.float32)
-    hammer = biquad_filter(hammer, "lowpass", 1400.0 if style == "dark" else 3600.0, sr=sr)
-
-    body = sig.astype(np.float32) + 0.22 * velocity * hammer
-    if style == "dark":
-        body = peaking_eq(body, freq=180.0, q=1.5, gain_db=3.5, sr=sr)
-        body = biquad_filter(body, "lowpass", 3200.0, sr=sr)
-    else:
-        body = biquad_filter(body, "highpass", 240.0, sr=sr)
-        body = peaking_eq(body, freq=3200.0, q=1.4, gain_db=3.0, sr=sr)
-
-    env = adsr_env(n_samples, sr, attack=0.003, decay=0.35, sustain=0.30, release=0.25)
-    return stereoize(body * env * velocity * 0.65, width=0.55 if style == "ice" else 0.35, delay_ms=13.0, sr=sr)
-
-
-def synth_pipe_organ(
-    freq: float,
-    duration: float,
-    velocity: float = 0.85,
-    sr: int = 44100,
-    low_register: bool = True,
-) -> np.ndarray:
-    """Multi-rank pipe organ (16', 8', 4', 2-2/3', 2') with authentic air-pipe chiff."""
-    n_samples = max(1, int(duration * sr))
-    t = np.arange(n_samples, dtype=np.float64) / sr
-
-    ranks = [
-        (0.5, 0.85 if low_register else 0.45),
-        (1.0, 1.00),
-        (2.0, 0.55 if low_register else 0.75),
-        (3.0, 0.22 if low_register else 0.38),
-        (4.0, 0.14 if low_register else 0.28),
-    ]
-    sig = np.zeros(n_samples, dtype=np.float64)
-    for mult, weight in ranks:
-        f_r = freq * mult
-        if f_r < 0.45 * sr:
-            sig += weight * np.sin(2.0 * math.pi * f_r * t + mult * 0.3)
-
-    rng = np.random.default_rng(int(freq * 19) % 32767)
-    chiff = rng.normal(0.0, 1.0, n_samples).astype(np.float32) * np.exp(-t * 55.0).astype(np.float32)
-    chiff = biquad_filter(chiff, "bandpass", min(freq * 3.0, 2400.0), sr=sr)
-
-    out = biquad_filter(sig.astype(np.float32) + 0.18 * chiff, "lowpass", 3600.0, sr=sr)
-    env = adsr_env(n_samples, sr, attack=0.025, decay=0.10, sustain=0.92, release=0.14)
-    return stereoize(out * env * velocity * 0.55, width=0.50, delay_ms=15.0, sr=sr)
-
-
-def synth_bell(
-    freq: float,
-    duration: float,
-    velocity: float = 0.85,
-    sr: int = 44100,
-    bell_type: str = "church",
-) -> np.ndarray:
-    """Risset inharmonic bell synthesis with bronze clapper strike transient."""
-    n_samples = max(1, int(duration * sr))
-    t = np.arange(n_samples, dtype=np.float64) / sr
-
-    partials = [
-        (0.50, 0.85, 0.55),
-        (1.00, 1.00, 0.75),
-        (1.183, 0.78, 1.05),
-        (1.506, 0.62, 1.35),
-        (2.00, 0.55, 1.80),
-        (2.514, 0.32, 2.50),
-        (3.011, 0.22, 3.20),
-        (4.166, 0.12, 4.40),
-    ]
-    if bell_type == "clock_bell":
-        partials[0] = (0.50, 1.15, 0.48)
-        partials[2] = (1.183, 0.90, 0.95)
-
-    sig = np.zeros(n_samples, dtype=np.float64)
-    for ratio, weight, dec in partials:
-        f_p = freq * ratio
-        if f_p < 0.45 * sr:
-            sig += weight * np.exp(-t * dec) * np.sin(2.0 * math.pi * f_p * t)
-
-    rng = np.random.default_rng(int(freq * 53) % 44444)
-    clapper = rng.normal(0.0, 1.0, n_samples).astype(np.float32) * np.exp(-t * 95.0).astype(np.float32)
-    clapper = biquad_filter(clapper, "bandpass", min(freq * 4.5, 4200.0), sr=sr)
-
-    out = sig.astype(np.float32) + 0.30 * clapper
-    out = biquad_filter(out, "lowpass", 5500.0, sr=sr)
-    env = adsr_env(n_samples, sr, attack=0.002, decay=0.4, sustain=0.65, release=0.4)
-    return stereoize(out * env * velocity * 0.52, width=0.65, delay_ms=18.0, sr=sr)
-
-
-def synth_clock_tick(
-    duration: float = 0.18,
-    velocity: float = 0.75,
-    sr: int = 44100,
-    is_tock: bool = False,
-) -> np.ndarray:
-    """2-stage mechanical escapement tick/tock (woody impulse + micro gear rebound)."""
-    n_samples = max(1, int(duration * sr))
-    t = np.arange(n_samples, dtype=np.float64) / sr
-    rng = np.random.default_rng(101 if not is_tock else 202)
-
-    click1 = rng.normal(0.0, 1.0, n_samples).astype(np.float32) * np.exp(-t * 260.0).astype(np.float32)
-    f_res = 2350.0 if not is_tock else 1980.0
-    click1 = biquad_filter(click1, "bandpass", f_res, sr=sr)
-
-    rebound_t = np.maximum(0.0, t - 0.032)
-    click2 = rng.normal(0.0, 1.0, n_samples).astype(np.float32) * np.exp(-rebound_t * 320.0).astype(np.float32)
-    click2[t < 0.032] = 0.0
-    click2 = 0.45 * biquad_filter(click2, "bandpass", f_res * 1.25, sr=sr)
-
-    out = (click1 + click2) * velocity * 1.4
-    return stereoize(out.astype(np.float32), width=0.18, delay_ms=4.0, sr=sr)
-
-
-def synth_choir_pad(
-    freq: float,
-    duration: float,
-    velocity: float = 0.75,
-    sr: int = 44100,
-    vowel: str = "ooh",
-) -> np.ndarray:
-    """Ghostly vocal formant choir pad (ASG / Eternity Forsakened style)."""
-    n_samples = max(1, int(duration * sr))
-
-    src = (
-        polyblep_saw(freq * 0.997, n_samples, sr=sr)
-        + polyblep_saw(freq, n_samples, sr=sr)
-        + polyblep_saw(freq * 1.003, n_samples, sr=sr)
-    ) / 3.0
-
-    formants = (
-        [(360.0, 6.0, 1.0), (780.0, 7.5, 0.65), (2450.0, 9.0, 0.25)]
-        if vowel == "ooh"
-        else [(720.0, 6.0, 1.0), (1180.0, 7.0, 0.75), (2600.0, 9.0, 0.30)]
-    )
-    vocal = np.zeros(n_samples, dtype=np.float32)
-    for f_hz, q_val, gain_w in formants:
-        b_pk, a_pk = signal.iirpeak(f_hz / (0.5 * sr), q_val)
-        vocal += gain_w * signal.lfilter(b_pk, a_pk, src).astype(np.float32)
-
-    rng = np.random.default_rng(777)
-    breath = biquad_filter(rng.normal(0.0, 0.08, n_samples).astype(np.float32), "bandpass", 1800.0, sr=sr)
-    vocal = biquad_filter(vocal + breath, "lowpass", 3400.0, sr=sr)
-
-    env = adsr_env(n_samples, sr, attack=0.22, decay=0.30, sustain=0.82, release=0.30)
-    return stereoize(vocal * env * velocity * 0.42, width=0.72, delay_ms=19.0, sr=sr)
-
-
-def synth_double_laugh(
-    base_freq: float = 165.0,
-    duration: float = 0.68,
-    velocity: float = 0.90,
-    sr: int = 44100,
-) -> np.ndarray:
-    """Two-syllable formant-synthesized maniacal 'HA - HA!' laugh timed to drop on beats."""
-    n_samples = max(1, int(duration * sr))
-    out = np.zeros(n_samples, dtype=np.float32)
-
-    syllables = [
-        (0.00, 0.24, base_freq * 1.12, base_freq * 0.94),
-        (0.28, 0.34, base_freq * 0.98, base_freq * 0.76),
-    ]
-    rng = np.random.default_rng(666)
-
-    for start_s, dur_s, f_start, f_end in syllables:
-        i0 = int(start_s * sr)
-        n_syl = min(int(dur_s * sr), n_samples - i0)
-        if n_syl <= 16:
-            continue
-        ts = np.arange(n_syl, dtype=np.float64) / sr
-        f_contour = np.linspace(f_start, f_end, n_syl)
-        glottal = polyblep_saw(f_contour, n_syl, sr=sr)
-
-        f1 = signal.lfilter(*signal.iirpeak(760.0 / (0.5 * sr), 5.5), glottal)
-        f2 = 0.8 * signal.lfilter(*signal.iirpeak(1240.0 / (0.5 * sr), 6.5), glottal)
-        f3 = 0.35 * signal.lfilter(*signal.iirpeak(2550.0 / (0.5 * sr), 8.0), glottal)
-
-        h_breath = rng.normal(0.0, 1.0, n_syl).astype(np.float32) * np.exp(-ts * 38.0).astype(np.float32)
-        h_breath = biquad_filter(h_breath, "bandpass", 1450.0, sr=sr)
-
-        syl_env = adsr_env(n_syl, sr, attack=0.015, decay=0.08, sustain=0.65, release=0.07)
-        syl = (f1 + f2 + f3 + 0.55 * h_breath).astype(np.float32) * syl_env
-        syl = np.tanh(syl * 1.6)
-        out[i0 : i0 + n_syl] += syl
-
-    out = biquad_filter(out, "highpass", 110.0, sr=sr)
-    out = biquad_filter(out, "lowpass", 4600.0, sr=sr)
-    return stereoize(out * velocity * 0.62, width=0.38, delay_ms=11.0, sr=sr)
-
-
-def synth_reese_bass(
-    freq: float,
-    duration: float,
-    velocity: float = 0.9,
-    sr: int = 44100,
-) -> np.ndarray:
-    """Deep dark neuro/DnB reese bass with locked sub-sine and warm low-pass (no buzz)."""
-    n_samples = max(1, int(duration * sr))
-    t = np.arange(n_samples, dtype=np.float64) / sr
-
-    sub = np.sin(2.0 * math.pi * freq * t).astype(np.float32)
-    saws = (
-        polyblep_saw(freq * 0.994, n_samples, sr=sr)
-        + polyblep_saw(freq, n_samples, sr=sr)
-        + polyblep_saw(freq * 1.006, n_samples, sr=sr)
-    ) / 3.0
-
-    mid_grit = np.tanh(saws * 2.4).astype(np.float32)
-    mid_grit = biquad_filter(mid_grit, "highpass", 85.0, sr=sr)
-    mid_grit = biquad_filter(mid_grit, "lowpass", 1450.0, sr=sr)
-
-    env = adsr_env(n_samples, sr, attack=0.012, decay=0.15, sustain=0.90, release=0.08)
-    st = stereoize(mid_grit * env * velocity * 0.45, width=0.50, delay_ms=10.0, sr=sr)
-    st[:, 0] += 0.65 * sub * env * velocity * 0.72
-    st[:, 1] += 0.65 * sub * env * velocity * 0.72
-    return st.astype(np.float32)
-
-
-def synth_y2k_electronic(
-    freq: float,
-    duration: float,
-    velocity: float = 0.85,
-    sr: int = 44100,
-    patch: str = "fm_bass",
-) -> np.ndarray:
-    """Y2K / 2008-era electronic & EHEF soaring lead instruments with clean band-limited edges."""
-    n_samples = max(1, int(duration * sr))
-    t = np.arange(n_samples, dtype=np.float64) / sr
-
-    if patch == "fm_bass":
-        mod_env = 2.8 * np.exp(-t * 11.0) + 0.45
-        mod = mod_env * np.sin(2.0 * math.pi * (freq * 2.0) * t)
-        car = np.sin(2.0 * math.pi * freq * t + mod).astype(np.float32)
-        car = biquad_filter(car, "lowpass", 2200.0, sr=sr)
-        env = adsr_env(n_samples, sr, attack=0.004, decay=0.18, sustain=0.65, release=0.06)
-        return stereoize(car * env * velocity * 0.70, width=0.25, delay_ms=7.0, sr=sr)
-
-    if patch == "tracker_arp":
-        sq = polyblep_square(freq, n_samples, sr=sr, duty=0.25)
-        sq = biquad_filter(sq, "lowpass", 4200.0, sr=sr)
-        env = adsr_env(n_samples, sr, attack=0.003, decay=0.09, sustain=0.35, release=0.04)
-        return stereoize(sq * env * velocity * 0.48, width=0.45, delay_ms=11.0, sr=sr)
-
-    detunes = [-7.0, -2.5, 2.5, 7.0]
-    lead = np.zeros(n_samples, dtype=np.float32)
-    for idx, c in enumerate(detunes):
-        f_v = freq * (2.0 ** (c / 1200.0))
-        lead += polyblep_saw(f_v, n_samples, sr=sr, phase0=idx * 0.23)
-    lead /= len(detunes)
-    if patch == "acid_lead":
-        lead = np.tanh(lead * 2.1).astype(np.float32)
-        lead = peaking_eq(lead, freq=min(freq * 3.5, 3200.0), q=4.5, gain_db=7.0, sr=sr)
-
-    lead = biquad_filter(lead, "highpass", 150.0, sr=sr)
-    lead = biquad_filter(lead, "lowpass", 4800.0, sr=sr)
-    env = adsr_env(n_samples, sr, attack=0.015, decay=0.18, sustain=0.80, release=0.14)
-    return stereoize(lead * env * velocity * 0.55, width=0.65, delay_ms=14.0, sr=sr)
-
-
-INSTRUMENTS: Dict[str, Callable[..., np.ndarray]] = {
-    "guitar": lambda f, d, v=0.85, sr=44100, **kw: synth_electric_guitar(f, d, v, sr, palm_mute=kw.get("palm_mute", 0.0), power_chord=True),
-    "guitars": lambda f, d, v=0.85, sr=44100, **kw: synth_electric_guitar(f, d, v, sr, palm_mute=kw.get("palm_mute", 0.25), power_chord=True),
-    "power_guitar": lambda f, d, v=0.85, sr=44100, **kw: synth_electric_guitar(f, d, v, sr, palm_mute=0.0, gain=6.5, power_chord=True),
-    "palm_guitar": lambda f, d, v=0.85, sr=44100, **kw: synth_electric_guitar(f, d, v, sr, palm_mute=0.72, gain=6.0, power_chord=True),
-    "strings": lambda f, d, v=0.80, sr=44100, **kw: synth_strings(f, d, v, sr, tremolo=False),
-    "trem_strings": lambda f, d, v=0.80, sr=44100, **kw: synth_strings(f, d, v, sr, tremolo=True),
-    "piano": lambda f, d, v=0.85, sr=44100, **kw: synth_piano(f, d, v, sr, style="dark"),
-    "piano_dark": lambda f, d, v=0.85, sr=44100, **kw: synth_piano(f, d, v, sr, style="dark"),
-    "ice_piano": lambda f, d, v=0.85, sr=44100, **kw: synth_piano(f, d, v, sr, style="ice"),
-    "music_box": lambda f, d, v=0.80, sr=44100, **kw: synth_piano(f, d, v, sr, style="ice"),
-    "harpsichord": lambda f, d, v=0.85, sr=44100, **kw: synth_piano(f, d, v, sr, style="harpsichord"),
-    "bell": lambda f, d, v=0.85, sr=44100, **kw: synth_bell(f, d, v, sr, bell_type="church"),
-    "bells": lambda f, d, v=0.85, sr=44100, **kw: synth_bell(f, d, v, sr, bell_type="church"),
-    "church_bells": lambda f, d, v=0.85, sr=44100, **kw: synth_bell(f, d, v, sr, bell_type="church"),
-    "clock_bell": lambda f, d, v=0.90, sr=44100, **kw: synth_bell(f, d, v, sr, bell_type="clock_bell"),
-    "clock_tick": lambda f, d, v=0.75, sr=44100, **kw: synth_clock_tick(d, v, sr, is_tock=kw.get("is_tock", False)),
-    "organ": lambda f, d, v=0.85, sr=44100, **kw: synth_pipe_organ(f, d, v, sr, low_register=False),
-    "organ_low": lambda f, d, v=0.85, sr=44100, **kw: synth_pipe_organ(f, d, v, sr, low_register=True),
-    "pipe_organ": lambda f, d, v=0.85, sr=44100, **kw: synth_pipe_organ(f, d, v, sr, low_register=True),
-    "choir": lambda f, d, v=0.75, sr=44100, **kw: synth_choir_pad(f, d, v, sr, vowel="ooh"),
-    "choir_pad": lambda f, d, v=0.75, sr=44100, **kw: synth_choir_pad(f, d, v, sr, vowel=kw.get("vowel", "ooh")),
-    "ha_laugh": lambda f, d, v=0.90, sr=44100, **kw: synth_double_laugh(f, d, v, sr),
-    "bass": lambda f, d, v=0.90, sr=44100, **kw: synth_reese_bass(f, d, v, sr),
-    "sub_bass": lambda f, d, v=0.90, sr=44100, **kw: synth_reese_bass(f, d, v, sr),
-    "reese": lambda f, d, v=0.90, sr=44100, **kw: synth_reese_bass(f, d, v, sr),
-    "reese_growl": lambda f, d, v=0.90, sr=44100, **kw: synth_reese_bass(f, d, v, sr),
-    "lead": lambda f, d, v=0.85, sr=44100, **kw: synth_y2k_electronic(f, d, v, sr, patch="lead_soar"),
-    "synth_lead": lambda f, d, v=0.85, sr=44100, **kw: synth_y2k_electronic(f, d, v, sr, patch="lead_soar"),
-    "y2k_fm_bass": lambda f, d, v=0.85, sr=44100, **kw: synth_y2k_electronic(f, d, v, sr, patch="fm_bass"),
-    "y2k_acid_lead": lambda f, d, v=0.85, sr=44100, **kw: synth_y2k_electronic(f, d, v, sr, patch="acid_lead"),
-    "y2k_arp": lambda f, d, v=0.80, sr=44100, **kw: synth_y2k_electronic(f, d, v, sr, patch="tracker_arp"),
+from . import dsp
+from .dsp import SR, mtof, TAU
+
+VOWELS = {  # formant (Hz, bandwidth, gain)
+    "a": [(800, 90, 1.0), (1150, 110, 0.5), (2900, 140, 0.15)],
+    "o": [(450, 80, 1.0), (800, 90, 0.4), (2830, 130, 0.1)],
+    "u": [(325, 70, 1.0), (700, 80, 0.3), (2700, 120, 0.05)],
+    "e": [(400, 70, 1.0), (1600, 100, 0.4), (2700, 120, 0.2)],
+    "ha": [(700, 110, 1.0), (1220, 140, 0.7), (2600, 180, 0.25)],
 }
 
 
-def list_instruments() -> List[str]:
-    return sorted(INSTRUMENTS.keys())
+def _tail(dur, r, sr=SR):
+    return max(2, int((dur + r) * sr))
 
 
-def synthesize_note(
-    instrument: str,
-    freq: float,
-    duration: float,
-    velocity: float = 0.85,
-    sr: int = 44100,
-    **kwargs,
-) -> np.ndarray:
-    fn = INSTRUMENTS.get(instrument.lower(), INSTRUMENTS["lead"])
-    return fn(freq, duration, velocity, sr, **kwargs)
+def _t(n, sr=SR):
+    return np.arange(n) / sr
 
 
-def render(instrument: str, midi: float, duration: float, velocity: float = 0.85, sr: int = 44100, **kwargs) -> np.ndarray:
-    """MIDI-note entry point used by song.py / audition.py: converts a MIDI number to Hz and synthesizes it."""
-    freq = 440.0 * 2.0 ** ((float(midi) - 69.0) / 12.0)
-    return synthesize_note(instrument, freq, duration, velocity, sr, **kwargs)
+def _out(y, peak=0.80, sr=SR, fade_out=0.02):
+    y = np.asarray(y, dtype=float)
+    if y.ndim == 1:
+        y = dsp.fade(y, 0.002, fade_out, sr)
+    else:
+        y = dsp.fade(y, 0.002, fade_out, sr)
+    p = np.max(np.abs(y))
+    return y * (peak / p) if p > 1e-9 else y
+
+
+def render(inst, midi, dur, vel=0.8, sr=SR, **kw):
+    f = float(mtof(midi))
+    fn = INSTRUMENTS[inst]
+    y = fn(f, dur, sr, **kw)
+    return y * vel
+
+
+# ── basses ──────────────────────────────────────────────────────────────────
+def sine_sub(f, dur, sr, **kw):
+    n = _tail(dur, 0.08)
+    return _out(dsp.osc("sine", f, n, sr) * dsp.adsr(n, 0.004, 0.05, 0.95, 0.08, sr), 0.75)
+
+
+def saw_bass(f, dur, sr, cutoff=700, drive=1.8, **kw):
+    n = _tail(dur, 0.06)
+    y = dsp.osc("saw", f, n, sr) * 0.7 + dsp.osc("square", f / 2, n, sr) * 0.4
+    env = dsp.adsr(n, 0.003, 0.18, 0.55, 0.06, sr)
+    cut = cutoff * (0.5 + 2.5 * np.exp(-np.arange(n) / (0.12 * sr)))
+    y = dsp.svf_lp(y, cut, 1.4, sr)
+    return _out(dsp.asym_drive(y, drive) * env, 0.76)
+
+
+def reese(f, dur, sr, **kw):
+    n = _tail(dur, 0.12)
+    y = (dsp.osc("saw", f, n, sr) + dsp.osc("saw", f * 1.012, n, sr) +
+         dsp.osc("saw", f * 0.988, n, sr)) / 3
+    y = dsp.svf_lp(y, 900, 1.1, sr)
+    y = dsp.asym_drive(y * 1.5, 2.5)
+    return _out(y * dsp.adsr(n, 0.01, 0.1, 0.9, 0.12, sr), 0.78)
+
+
+def sub_drop(f, dur, sr, **kw):
+    n = _tail(dur, 0.1)
+    t = _t(n, sr)
+    fr = f * np.exp(-t * 1.5) + f * 0.4
+    return _out(np.sin(TAU * np.cumsum(fr) / sr) * dsp.adsr(n, 0.005, 0.1, 0.9, 0.1, sr), 0.8)
+
+
+def acid_303(f, dur, sr, accent=False, **kw):
+    """TB-303: 45% sine sub + a saw through a resonant sweeping SVF, accent overdrive."""
+    n = _tail(dur, 0.07)
+    t = _t(n, sr)
+    sub = np.sin(TAU * f * t)
+    sawy = dsp.osc("saw", f, n, sr) * 0.8 + dsp.osc("square", f * 0.5, n, sr) * 0.2
+    base, top = (4.0, 22.0) if accent else (2.8, 13.0)
+    cut = f * (base + top * np.exp(-t / (0.075 if accent else 0.12)))
+    cut = np.clip(cut, 60.0, sr * 0.42)
+    y = dsp.svf_lp(sawy * 0.55 + sub * 0.45, cut, 4.0 if accent else 2.8, sr)
+    y = dsp.asym_drive(y * (1.9 if accent else 1.15), 2.2 if accent else 1.3, 0.08)
+    env = (1.0 - np.exp(-t * 900.0)) * np.exp(-t * (3.0 if accent else 4.5))
+    return _out(y * env, 0.80)
+
+
+def pulsing_bass(f, dur, sr, **kw):
+    """Dark 16th-note bass: filtered saw+square with a fast amplitude pulse."""
+    n = _tail(dur, 0.04)
+    t = _t(n, sr)
+    y = dsp.osc("saw", f, n, sr) * 0.65 + dsp.osc("square", f, n, sr, pw=0.35) * 0.35
+    cut = f * (2.2 + 5.5 * np.exp(-t * 9.0))
+    y = dsp.svf_lp(y, cut, 1.8, sr)
+    pulse = 0.62 + 0.38 * np.cos(TAU * 8.0 * t) ** 2
+    env = (1.0 - np.exp(-t * 700.0)) * np.exp(-t * 6.0)
+    return _out(dsp.asym_drive(y, 1.6) * env * pulse, 0.78)
+
+
+def y2k_bass(f, dur, sr, **kw):
+    """Sub + rubbery filtered pluck: the bouncy late-90s jungle sub."""
+    n = _tail(dur, 0.08)
+    t = _t(n, sr)
+    blip = 1.0 + 0.35 * np.exp(-t * 45.0)
+    phase = np.cumsum(f * blip / sr)
+    sub = np.sin(TAU * phase)
+    ph = phase % 1.0
+    sawp = 2.0 * ph - 1.0
+    sqp = np.where(ph < 0.42, 1.0, -1.0)
+    body = dsp.svf_lp(sawp * 0.55 + sqp * 0.45, 420.0, 2.2, sr)
+    y = np.tanh((0.85 * sub + 0.45 * body) * 1.6)
+    y *= (1.0 - np.exp(-t * 400.0)) * np.exp(-t * 9.0)
+    return _out(y, 0.80)
+
+
+# ── plucks, leads, pads ─────────────────────────────────────────────────────
+def pluck(f, dur, sr, bright=0.7, **kw):
+    n = _tail(dur, 0.25)
+    y = dsp.osc("saw", f, n, sr) * 0.6 + dsp.osc("square", f * 2.0, n, sr) * 0.2
+    cut = f * (2 + 9 * bright * np.exp(-np.arange(n) / (0.09 * sr)))
+    y = dsp.svf_lp(y, cut, 1.1, sr)
+    return _out(y * dsp.decay(n, max(dur * 0.9, 0.18), sr), 0.75)
+
+
+def lead_saw(f, dur, sr, vib=0.15, detune=0.12, **kw):
+    n = _tail(dur, 0.12)
+    y = dsp.supersaw(f, n, 5, detune, sr, vib_delay_s=0.16, vib_depth=vib * 0.9)
+    y = dsp.svf_lp(y, min(f * 8, 9000), 0.9, sr)
+    return _out(y * dsp.adsr(n, 0.008, 0.12, 0.7, 0.12, sr), 0.78)
+
+
+def lead_square(f, dur, sr, duty=0.5, **kw):
+    n = _tail(dur, 0.04)
+    y = dsp.osc("pulse", f, n, sr, pw=duty, vib_delay_s=0.12, vib_depth=0.08)
+    return _out(y * dsp.adsr(n, 0.002, 0.05, 0.8, 0.04, sr), 0.70)
+
+
+def chip_tri(f, dur, sr, **kw):
+    n = _tail(dur, 0.03)
+    return _out(dsp.osc("tri", f, n, sr) * dsp.adsr(n, 0.002, 0.02, 0.95, 0.03, sr), 0.75)
+
+
+def chip_lead(f, dur, sr, **kw):
+    """Pulse + detuned saw, delayed vibrato, a touch of bitcrush (NES/Genesis lead)."""
+    n = _tail(dur, 0.05)
+    y = (dsp.osc("pulse", f, n, sr, pw=0.28, vib_delay_s=0.20, vib_depth=0.20) * 0.65 +
+         dsp.osc("saw", f * 1.004, n, sr, vib_delay_s=0.20, vib_depth=0.20) * 0.35)
+    y = dsp.svf_lp(y, min(f * 9, 12000), 0.9, sr)
+    y = dsp.bitcrush(y, 10, 1)
+    return _out(y * dsp.adsr(n, 0.002, 0.06, 0.82, 0.05, sr), 0.76)
+
+
+def pad(f, dur, sr, bright=0.5, **kw):
+    n = _tail(dur, 0.6)
+    t = _t(n, sr)
+    y = dsp.supersaw(f, n, 6, 0.22, sr, vib_delay_s=0.4, vib_depth=0.06)
+    cut = f * (2 + 6 * bright) * (0.6 + 0.4 * np.minimum(t / max(dur, 0.1), 1))
+    y = dsp.svf_lp(y, cut, 0.8, sr)
+    y = dsp.adsr(n, 0.35, 0.3, 0.8, 0.6, sr) * y
+    st = np.column_stack([dsp.widen(np.column_stack([y, y]), 0.009, sr)[:, 0], y])
+    return _out(st, 0.60)
+
+
+def strings(f, dur, sr, **kw):
+    n = _tail(dur, 0.4)
+    y = dsp.supersaw(f, n, 5, 0.09, sr, vib_delay_s=0.22, vib_rate=5.5, vib_depth=0.16)
+    y = dsp.svf_lp(y, min(f * 6, 7000), 0.85, sr)
+    y = y * dsp.adsr(n, 0.12, 0.2, 0.85, 0.4, sr)
+    return _out(np.column_stack([y, np.roll(y, 19)]), 0.55, fade_out=0.05)
+
+
+def brass(f, dur, sr, **kw):
+    n = _tail(dur, 0.12)
+    t = _t(n, sr)
+    y = dsp.osc("saw", f, n, sr) + dsp.osc("saw", f * 1.004, n, sr)
+    cut = f * (1.5 + 7 * np.minimum(t / 0.09, 1))
+    y = dsp.svf_lp(y * 0.5, cut, 1.5, sr)
+    return _out(y * dsp.adsr(n, 0.04, 0.1, 0.8, 0.12, sr), 0.72)
+
+
+def choir(f, dur, sr, vowel="a", **kw):
+    n = _tail(dur, 0.5)
+    src = dsp.supersaw(f, n, 4, 0.12, sr, vib_delay_s=0.3, vib_depth=0.12)
+    y = dsp.formant(src, VOWELS.get(vowel, VOWELS["a"]), sr)
+    y = y * dsp.adsr(n, 0.25, 0.2, 0.9, 0.5, sr)
+    return _out(y, 0.58, fade_out=0.06)
+
+
+def wobble(f, dur, sr, lfo=2.0, **kw):
+    n = _tail(dur, 0.08)
+    t = _t(n, sr)
+    y = dsp.osc("saw", f, n, sr) + dsp.osc("saw", f * 1.007, n, sr) * 0.8 + dsp.osc("square", f * 0.5, n, sr) * 0.5
+    cut = 180 + 2600 * (0.5 + 0.5 * np.sin(TAU * lfo * t - np.pi / 2)) ** 1.5
+    y = dsp.asym_drive(dsp.svf_lp(y * 0.5, cut, 1.6, sr), 2.2)
+    return _out(y * dsp.adsr(n, 0.005, 0.1, 0.95, 0.08, sr), 0.80)
+
+
+# ── guitars (Karplus-Strong) ────────────────────────────────────────────────
+def _ks_guitar(f, dur, sr, kind="power", mute=False, drive=7.0, bright=0.65, **kw):
+    n = _tail(dur, 0.045 if mute else 0.5)
+    damp = 0.968 if mute else 0.996
+    br = 0.35 if mute else bright
+    parts = [(1.0, 1.0), (1.4983, 0.55), (2.0, 0.30)] if kind == "power" else [(1.0, 1.0), (2.0, 0.22)]
+    y = np.zeros(n)
+    for mult, amp in parts:
+        if f * mult < sr * 0.44:
+            y += amp * dsp.ks_string(f * mult, n, damp, br, sr)
+    y = dsp.asym_drive(y * 0.55, drive, 0.10)
+    st = dsp.cab_filter(np.column_stack([y, y]), sr, 130, 4000)
+    y = st.mean(1)
+    t = _t(n, sr)
+    if mute:
+        y *= np.exp(-t * 13.0)
+    y *= (1.0 - np.exp(-t * 1500.0))
+    return _out(y, 0.85 if mute else 0.80)
+
+
+def guitar_dist(f, dur, sr, drive=9.0, **kw):
+    """Distorted power chord: KS root/5th/oct -> asymmetric tube drive -> cabinet."""
+    bright = kw.pop("bright", 0.70)
+    return _ks_guitar(f, dur, sr, kind="power", mute=False, drive=drive, bright=bright, **kw)
+
+
+def guitar_mute(f, dur, sr, **kw):
+    drive = kw.pop("drive", 9.0)
+    kw.pop("bright", None)
+    return _ks_guitar(f, dur, sr, kind="power", mute=True, drive=drive, bright=0.40, **kw)
+
+
+def guitar_elec(f, dur, sr, drive=6.0, mute=0.0, bright=0.7, **kw):
+    """Electric guitar: KS string(s) -> amp-style soft clipping -> cabinet.
+    mute 0..1 shortens the note (palm mute)."""
+    return _ks_guitar(f, dur * (1.0 - 0.55 * mute), sr, kind="single", mute=mute > 0.5,
+                      drive=drive, bright=bright, **kw)
+
+
+def guitar_pluck(f, dur, sr, bright=0.6, sustain=1.0, **kw):
+    """Clean/acoustic plucked string: KS with a longer, brighter ring + pick transient."""
+    n = _tail(dur, 0.35)
+    y = dsp.ks_string(f, n, 0.9975, 0.55 + 0.35 * bright, sr)
+    t = _t(n, sr)
+    y *= np.exp(-t / max(0.6 * sustain, 0.05))
+    return _out(y, 0.78)
+
+
+# ── pianos ──────────────────────────────────────────────────────────────────
+def _piano(f, dur, sr, variant="bright", **kw):
+    tail = 1.1 if variant != "m1" else 0.45
+    n = _tail(dur, tail)
+    t = _t(n, sr)
+    B = 0.00035 if variant != "m1" else 0.0006
+    kmax = 8
+    y = np.zeros(n)
+    base_tau = {"bright": 1.3, "m1": 0.55, "ep": 1.0}.get(variant, 1.2)
+    for k in range(1, kmax + 1):
+        fk = k * f * np.sqrt(1.0 + B * k * k)
+        if fk >= sr * 0.44:
+            break
+        amp = (1.0 / k ** (1.15 if variant == "bright" else 1.0)) * (1.0 if k % 7 else 0.55)
+        tau = max(base_tau / (1.0 + 0.55 * (k - 1)), 0.06)
+        det = 0.0 if variant == "m1" else 3.0
+        for d in ((0.0,) if det == 0 else (-det, 0.0, det)):
+            fk2 = fk * 2 ** (d / 1200.0)
+            if fk2 < sr * 0.44:
+                y += amp * np.sin(TAU * fk2 * t + 0.7 * k) * np.exp(-t / tau)
+    y = y / (sum(1.0 / k ** 1.15 for k in range(1, kmax + 1)) * 1.25)
+    # unison beating on the fundamental
+    y += 0.18 * np.sin(TAU * f * 1.0015 * t) * np.exp(-t / base_tau)
+    # 10 ms hammer thump
+    nh = min(n, int(0.012 * sr))
+    if nh > 4:
+        rng = np.random.RandomState(int(f) % 4093 + 3)
+        thump = dsp.bp(rng.randn(nh), max(120.0, f * 1.5), min(9000.0, f * 8 + 900), sr) * np.exp(-np.arange(nh) / (0.0028 * sr))
+        y[:nh] += thump * (0.35 if variant != "m1" else 0.6)
+    if variant == "m1":
+        y = dsp.chorus(y, rate=0.9, depth=0.0025, mix=0.35, sr=sr)
+    y *= (1.0 - np.exp(-t * 900.0))
+    st = np.column_stack([y, np.roll(y, 7)])
+    if variant != "ep":
+        st = dsp.hall_reverb(st, 0.18 if variant == "bright" else 0.10, 1.6, sr, taps=6)
+    return _out(st, 0.72, fade_out=0.03)
+
+
+def piano(f, dur, sr, **kw):
+    return _piano(f, dur, sr, "bright", **kw)
+
+
+def piano_m1(f, dur, sr, **kw):
+    """90s punchy house piano stab (M1-style): bright, short, chorused."""
+    return _piano(f, min(dur, 0.45), sr, "m1", **kw)
+
+
+def ep(f, dur, sr, **kw):
+    """DX7 Rhodes: 1:1 FM body + 14:1 tine ping + chorus."""
+    n = _tail(dur, 0.5)
+    t = _t(n, sr)
+    body = dsp.fm(f, n, 1.0, 1.7, dsp.decay(n, 0.6, sr), sr)
+    tine = dsp.fm(f, n, 14.0, 0.55, dsp.decay(n, 0.035, sr), sr)
+    y = body * np.exp(-t / max(dur, 0.45)) + 0.32 * tine * np.exp(-t * 6.0)
+    y = dsp.chorus(y, rate=0.55, depth=0.0028, mix=0.4, sr=sr)
+    return _out(np.column_stack([y, np.roll(y, 11)]), 0.72, fade_out=0.04)
+
+
+# ── organs ──────────────────────────────────────────────────────────────────
+_DRAWBARS = [(0.5, 0.50), (1.0, 1.00), (1.5, 0.85), (2.0, 0.70), (3.0, 0.45), (4.0, 0.35), (6.0, 0.22), (8.0, 0.15)]
+
+
+def _organ(f, dur, sr, rock=False, pipe=False, **kw):
+    tail = 0.9 if pipe else 0.18
+    n = _tail(dur, tail)
+    t = _t(n, sr)
+    yL = np.zeros(n)
+    yR = np.zeros(n)
+    for i, (mult, amp) in enumerate(_DRAWBARS):
+        fk = f * mult
+        if fk >= sr * 0.44:
+            continue
+        det = 0.12 if i % 2 else -0.12
+        yL += amp * np.sin(TAU * fk * 2 ** (-det / 1200.0) * t)
+        yR += amp * np.sin(TAU * fk * 2 ** (det / 1200.0) * t)
+    yL /= 3.2
+    yR /= 3.2
+    if pipe:
+        nb = min(n, int(0.04 * sr))
+        rng = np.random.RandomState(91)
+        breath = dsp.bp(rng.randn(nb), 500, 5000, sr) * np.linspace(0, 1, nb) ** 1.5
+        yL[:nb] += breath * 0.30
+        yR[:nb] += breath * 0.26
+        wet = dsp.hall_reverb(np.column_stack([yL, yR]), 0.5, 3.2, sr, damp=5500)
+        yL, yR = wet[:, 0], wet[:, 1]
+    # 20 ms key click
+    nk = min(n, int(0.02 * sr))
+    if nk:
+        rng = np.random.RandomState(int(f) % 2003 + 7)
+        click = dsp.hp(rng.randn(nk), 2200, sr) * np.exp(-np.arange(nk) / (0.004 * sr)) * 0.5
+        yL[:nk] += click
+        yR[:nk] += click * 0.8
+    y = np.column_stack([yL, yR])
+    if rock:
+        y = np.column_stack([dsp.asym_drive(y[:, c] * 1.8, 3.2) for c in range(2)])
+        rot = 0.82 + 0.18 * np.sin(TAU * 6.0 * t)
+        y = np.column_stack([y[:, 0] * rot, y[:, 1] * (1.82 - rot)])
+        y = dsp.chorus(y, rate=6.0, depth=0.0012, mix=0.25, sr=sr)
+    env = dsp.adsr(n, 0.008, 0.03 if not pipe else 0.05, 1.0, 0.35 if pipe else 0.10, sr)
+    return _out(y * env[:, None], 0.62 if pipe else 0.66)
+
+
+def organ(f, dur, sr, **kw):
+    """90s house drawbar organ with key click and stereo shimmer."""
+    return _organ(f, dur, sr, **kw)
+
+
+def organ_rock(f, dur, sr, **kw):
+    """Overdriven B3 through a 6 Hz rotary tremolo."""
+    return _organ(f, dur, sr, rock=True, **kw)
+
+
+def organ_pipe(f, dur, sr, **kw):
+    """Church pipe organ: 35 ms breath onset, bright upper ranks, cathedral reverb."""
+    return _organ(f, dur, sr, pipe=True, **kw)
+
+
+# ── bells and chimes ────────────────────────────────────────────────────────
+def bell(f, dur, sr, **kw):
+    """Y2K FM bell with ping-pong delay and hall reverb."""
+    n = _tail(dur, 1.5)
+    t = _t(n, sr)
+    ienv = dsp.decay(n, 0.8, sr)
+    y = dsp.fm(f, n, 3.5, 2.2, ienv, sr) + 0.4 * dsp.fm(f * 2.0, n, 1.4, 1.0, ienv, sr)
+    y *= np.exp(-t / 1.25) * (1.0 - np.exp(-t * 800.0))
+    st = np.column_stack([y, y])
+    st = dsp.ping_pong_delay(st, 0.30, 0.32, 0.30, sr)
+    st = dsp.hall_reverb(st, 0.24, 1.8, sr, taps=7)
+    return _out(st, 0.62, fade_out=0.05)
+
+
+def bell_tubular(f, dur, sr, **kw):
+    """Tubular bell: metallic partials [1, 2.76, 4.07, 5.43] with long decays."""
+    n = _tail(dur, 2.4)
+    t = _t(n, sr)
+    y = np.zeros(n)
+    for mult, amp, tau in ((1.0, 1.0, 2.6), (2.76, 0.55, 1.8), (4.07, 0.35, 1.2), (5.43, 0.22, 0.9), (7.1, 0.10, 0.6)):
+        if f * mult < sr * 0.44:
+            y += amp * np.sin(TAU * f * mult * t) * np.exp(-t / tau)
+    rng = np.random.RandomState(int(f) % 3001 + 5)
+    ns = min(n, int(0.02 * sr))
+    y[:ns] += dsp.hp(rng.randn(ns), 2500, sr) * np.exp(-np.arange(ns) / (0.004 * sr)) * 0.35
+    st = dsp.hall_reverb(np.column_stack([y, y]), 0.3, 2.4, sr, taps=8)
+    return _out(st, 0.58, fade_out=0.06)
+
+
+def music_box(f, dur, sr, **kw):
+    """Eerie cold celesta: 4:1 FM tine with a detuned upper sparkle."""
+    n = _tail(dur, 0.8)
+    t = _t(n, sr)
+    y = dsp.fm(f, n, 4.0, 1.3, dsp.decay(n, 0.12, sr), sr)
+    y += 0.22 * np.sin(TAU * f * 7.02 * t) * np.exp(-t / 0.10)
+    y *= np.exp(-t / 0.45) * (1.0 - np.exp(-t * 1200.0))
+    st = np.column_stack([y, np.roll(y, 5)])
+    st = dsp.hall_reverb(st, 0.16, 1.4, sr, taps=5)
+    return _out(st, 0.55, fade_out=0.04)
+
+
+def clock_bell(f, dur, sr, **kw):
+    """A Grave Soul-style deep church/clock bell: octave-down hum, felt+metal strike, cathedral tail."""
+    n = _tail(dur, 2.6)
+    t = _t(n, sr)
+    y = np.zeros(n)
+    for mult, amp, tau in ((0.5, 0.95, 3.6), (1.0, 0.85, 3.0), (1.2, 0.45, 2.2),
+                           (1.5, 0.32, 1.8), (2.0, 0.35, 1.5), (2.74, 0.18, 1.0),
+                           (3.4, 0.12, 0.8), (4.1, 0.08, 0.6)):
+        fk = f * mult
+        if fk < sr * 0.44:
+            y += amp * np.sin(TAU * fk * t + 0.3 * mult) * np.exp(-t / tau)
+    rng = np.random.RandomState(int(f) % 4001 + 9)
+    ns = min(n, int(0.05 * sr))
+    felt = dsp.lp(rng.randn(ns), 1400, sr) * np.exp(-np.arange(ns) / (0.012 * sr)) * 0.7
+    metal = dsp.hp(rng.randn(ns), 3500, sr) * np.exp(-np.arange(ns) / (0.004 * sr)) * 0.35
+    y[:ns] += felt + metal
+    st = dsp.hall_reverb(np.column_stack([y, np.roll(y, 23)]), 0.42, 3.6, sr, damp=4500, taps=12)
+    return _out(st, 0.70, fade_out=0.09)
+
+
+# ── orchestral / FX / percussion voices ────────────────────────────────────
+def stab(f, dur, sr, **kw):
+    n = _tail(dur, 0.15)
+    y = dsp.supersaw(f, n, 5, 0.25, sr)
+    y = dsp.svf_lp(y, f * (3 + 12 * np.exp(-np.arange(n) / (0.08 * sr))), 1.6, sr)
+    return _out(y * dsp.adsr(n, 0.002, 0.12, 0.2, 0.15, sr), 0.72)
+
+
+def rave_stab(f, dur, sr, **kw):
+    """90s rave minor-chord snap (root + minor third + fifth + octave)."""
+    n = _tail(dur, 0.22)
+    y = np.zeros(n)
+    for mult in (1.0, 2 ** (3 / 12), 2 ** (7 / 12), 2.0):
+        y += dsp.osc("saw", f * mult, n, sr) + dsp.osc("square", f * mult * 1.004, n, sr) * 0.35
+    cut = f * (4 + 18 * np.exp(-np.arange(n) / (0.06 * sr)))
+    y = dsp.svf_lp(y, cut, 1.8, sr)
+    y = dsp.chorus(np.column_stack([y, y]), rate=5.0, depth=0.001, mix=0.3, sr=sr)
+    env = dsp.adsr(n, 0.002, 0.16, 0.0, 0.18, sr)
+    return _out(y * env[:, None], 0.78)
+
+
+def orch_hit(f, dur, sr, **kw):
+    """Orchestral hit: detuned string chord + timpani thump + noise transient."""
+    n = _tail(dur, 0.8)
+    t = _t(n, sr)
+    y = np.zeros(n)
+    for mult in (1.0, 2 ** (3 / 12), 2 ** (7 / 12), 2.0, 2 ** (10 / 12)):
+        y += dsp.supersaw(f * mult, n, 3, 0.10, sr)
+    y = dsp.svf_lp(y, 4800, 0.9, sr) * np.exp(-t / 0.55)
+    thump = np.sin(TAU * np.cumsum(f * 0.5 * np.exp(-t * 5) + 45) / sr) * np.exp(-t * 4.0)
+    rng = np.random.RandomState(41)
+    y += 0.6 * thump + 0.25 * dsp.hp(rng.randn(n), 2000, sr) * np.exp(-t * 30.0)
+    st = dsp.hall_reverb(np.column_stack([y, y]), 0.25, 2.0, sr, taps=7)
+    return _out(st, 0.76, fade_out=0.05)
+
+
+def rave_shout(f, dur, sr, **kw):
+    """Dual/triple band-pass formant 'Ha!' (short vocal shout)."""
+    n = _tail(min(dur, 0.22), 0.10)
+    t = _t(n, sr)
+    rng = np.random.RandomState(77)
+    src = rng.randn(n)
+    y = dsp.formant(src, VOWELS["ha"], sr)
+    y += 0.3 * dsp.formant(dsp.osc("saw", f, n, sr), VOWELS["ha"], sr)
+    env = (1.0 - np.exp(-t * 900.0)) * (np.exp(-t * 9.0) + 0.35 * np.exp(-((t - 0.09) / 0.03) ** 2))
+    return _out(y * env, 0.72)
+
+
+def marimba(f, dur, sr, **kw):
+    """Woody mallet: fundamental + 4th + 9th partial, fast decay, soft mallet click."""
+    n = _tail(dur, 0.45)
+    t = _t(n, sr)
+    y = (np.sin(TAU * f * t) + 0.35 * np.sin(TAU * f * 3.93 * t) * np.exp(-t * 18)
+         + 0.15 * np.sin(TAU * f * 9.2 * t) * np.exp(-t * 30))
+    y *= np.exp(-t / 0.38) * (1.0 - np.exp(-t * 700.0))
+    rng = np.random.RandomState(int(f) % 1709 + 2)
+    ns = min(n, int(0.008 * sr))
+    y[:ns] += dsp.bp(rng.randn(ns), 800, 3500, sr) * np.exp(-np.arange(ns) / (0.002 * sr)) * 0.3
+    return _out(y, 0.70)
+
+
+def heartbeat(f, dur, sr, **kw):
+    """Two low thumps (lub-dub)."""
+    n = _tail(max(dur, 0.55), 0.15)
+    t = _t(n, sr)
+    y = np.zeros(n)
+    for off, g in ((0.0, 1.0), (0.20, 0.72)):
+        tt = np.maximum(t - off, 0.0)
+        on = (t >= off)
+        y += np.sin(TAU * (52 + 34 * np.exp(-tt * 42)) * tt) * np.exp(-tt * 19) * g * on
+    return _out(np.tanh(y * 1.5), 0.72)
+
+
+def siren_riser(f, dur, sr, **kw):
+    """Rising siren: pitch climbs an octave+, with tremolo and air."""
+    n = _tail(dur, 0.10)
+    t = _t(n, sr)
+    fr = f * (1.0 + 3.0 * (t / max(dur, 0.05)) ** 1.6)
+    y = np.sin(TAU * np.cumsum(fr) / sr) * 0.6 + dsp.osc("saw", fr, n, sr) * 0.25
+    y *= 0.55 + 0.45 * np.sin(TAU * 7.0 * t) ** 2
+    rng = np.random.RandomState(15)
+    y += 0.18 * dsp.hp(rng.randn(n), 2000, sr) * (t / max(dur, 0.05))
+    return _out(y * (t / max(dur, 0.05)) ** 1.3, 0.68)
+
+
+def clock_tick(f, dur, sr, **kw):
+    """Woodblock/clock tick: short filtered click with a pitched body."""
+    n = _tail(min(dur, 0.12), 0.05)
+    t = _t(n, sr)
+    rng = np.random.RandomState(int(f) % 811 + 4)
+    y = dsp.bp(rng.randn(n), 1200, 6000, sr) * np.exp(-t * 90.0)
+    y += 0.5 * np.sin(TAU * f * t) * np.exp(-t * 55.0)
+    return _out(y, 0.62)
+
+
+def drone(f, dur, sr, **kw):
+    n = _tail(dur, 1.0)
+    t = _t(n, sr)
+    y = dsp.osc("saw", f * (1 + 0.002 * np.sin(TAU * 0.13 * t)), n, sr) + dsp.osc("saw", f * 1.0145, n, sr) * 0.8
+    y = dsp.svf_lp(y * 0.5, 250 + 500 * (0.5 + 0.5 * np.sin(TAU * 0.09 * t)), 1.1, sr)
+    return _out(dsp.asym_drive(y, 1.5) * dsp.adsr(n, 0.8, 0.5, 0.9, 1.0, sr), 0.62)
+
+
+def showtime_sax(f, dur, sr, **kw):
+    """Theatrical formant synth-sax: 35 ms upward scoop, breath transient, delayed vibrato."""
+    n = _tail(dur, 0.18)
+    t = _t(n, sr)
+    sawy = dsp.osc("saw", f, n, sr, glide_from=f * 0.94, glide_s=0.035,
+                   vib_delay_s=0.18, vib_rate=5.2, vib_depth=0.18)
+    sawy += 0.35 * dsp.osc("square", f * 2.0, n, sr)
+    body = dsp.formant(sawy, VOWELS["a"], sr) * 1.4
+    breath = dsp.bp(np.random.RandomState(int(f) % 997 + 8).randn(n), 900, 4200, sr)
+    breath *= np.exp(-t * 22.0) * 0.35
+    y = body + breath
+    y *= (1.0 - np.exp(-t * 160.0)) * np.exp(-t * 1.6)
+    y = dsp.svf_lp(y, 5200, 0.8, sr)
+    st = dsp.hall_reverb(np.column_stack([y, np.roll(y, 9)]), 0.16, 1.5, sr, taps=6)
+    return _out(st, 0.66, fade_out=0.04)
+
+
+INSTRUMENTS = {k: v for k, v in dict(
+    # legacy keys (kept working, upgraded DSP)
+    sine_sub=sine_sub, saw_bass=saw_bass, reese=reese, pluck=pluck, lead_saw=lead_saw,
+    lead_square=lead_square, chip_tri=chip_tri, pad=pad, strings=strings, brass=brass,
+    ep=ep, bell=bell, piano=piano, organ=organ, choir=choir, guitar=guitar_dist,
+    guitar_mute=guitar_mute, sub_drop=sub_drop, stab=stab, drone=drone,
+    music_box=music_box, wobble=wobble, guitar_pluck=guitar_pluck, guitar_elec=guitar_elec,
+    # V2 additions
+    piano_m1=piano_m1, organ_rock=organ_rock, organ_pipe=organ_pipe,
+    bell_tubular=bell_tubular, clock_bell=clock_bell, acid_303=acid_303,
+    chip_lead=chip_lead, pulsing_bass=pulsing_bass, y2k_bass=y2k_bass,
+    showtime_sax=showtime_sax, marimba=marimba, rave_stab=rave_stab,
+    orch_hit=orch_hit, rave_shout=rave_shout, heartbeat=heartbeat,
+    siren_riser=siren_riser, clock_tick=clock_tick).items()}
+
+
+# ── v3 merge: the buzz-free engine (forge/instruments_v3.py: PolyBLEP oscillators, Karplus-Strong guitars,
+# physical bells/organs, Y2K voices). Its voices take (freq, dur, velocity, sr); adapt them to V2's (f, dur, sr).
+# Applied BEFORE the v1.4 real/voices merge below, so those newer voices still win any shared name.
+# `strings` and `choir` stay V2's: the v3 versions failed the selftest peak check (too quiet / non-finite).
+from . import instruments_v3 as _v3  # noqa: E402
+
+_V3_KEEP_V2 = {"strings", "choir"}
+
+
+def _adapt_v3(fn):
+    def voice(f, dur, sr=SR, **kw):
+        y = np.asarray(fn(f, dur, 0.85, sr, **kw), dtype=float)
+        pk = float(np.max(np.abs(y))) if y.size else 0.0
+        if 1e-6 < pk < 0.3:          # some v3 pads render very quietly: bring them up to a usable level
+            y = y * (0.55 / pk)
+        return y
+    voice.__doc__ = getattr(fn, "__doc__", None)
+    return voice
+
+
+for _k, _fn in _v3.INSTRUMENTS.items():
+    if _k not in _V3_KEEP_V2:
+        INSTRUMENTS[_k] = _adapt_v3(_fn)
+
+
+# ── v1.4 merge: the "real" voices (forge/real.py, forge/voices.py). V2's own names are untouched so both can be A/B tested.
+from . import real as _real, voices as _voices  # noqa: E402
+INSTRUMENTS.update(_real.NEW)
+INSTRUMENTS.update(_voices.NEW)
+INSTRUMENTS.update(rhodes=_voices.ep_rhodes, harp_pluck=_voices.harp, strings_real=_voices.string_ensemble,
+                   brass_real=_voices.brass_section, bass_pick=_voices.bass_guitar, glockenspiel=_real.glock,
+                   organ_pipe_real=_real.organ_church, tubular_bell=_real.bell_tubular)
